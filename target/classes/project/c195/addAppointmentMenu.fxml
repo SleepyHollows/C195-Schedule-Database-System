@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="512.0" prefWidth="741.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.c195.controller.loginMenuController">
+    <Text layoutX="120.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer ID">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Text>
+    <Text layoutX="154.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User ID">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Text>
+    <Text layoutX="173.0" layoutY="182.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Text>
+    <TextField editable="false" layoutX="232.0" layoutY="104.0" />
+    <TextField editable="false" layoutX="232.0" layoutY="133.0" />
+    <TextField layoutX="232.0" layoutY="164.0" />
+    <TextField layoutX="232.0" layoutY="194.0" />
+    <Text layoutX="139.0" layoutY="353.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Time">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Text>
+    <Text layoutX="147.0" layoutY="383.0" strokeType="OUTSIDE" strokeWidth="0.0" text="End Time">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Text>
+    <TextField layoutX="232.0" layoutY="335.0" />
+    <TextField layoutX="232.0" layoutY="365.0" />
+    <Text layoutX="396.0" layoutY="352.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hour" />
+    <Text layoutX="522.0" layoutY="352.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Min" />
+    <Button layoutX="232.0" layoutY="409.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="66.0" text="Save" />
+    <Button layoutX="315.0" layoutY="409.0" mnemonicParsing="false" onAction="#openOverviewMenu" prefHeight="26.0" prefWidth="66.0" text="Cancel" />
+    <Text layoutX="145.0" layoutY="249.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Location">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Text>
+    <Text layoutX="123.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Text>
+    <Text layoutX="147.0" layoutY="281.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contact">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Text>
+    <Text layoutX="171.0" layoutY="315.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Text>
+    <Text layoutX="25.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="C195 - Add Appointment">
+        <font>
+            <Font size="27.0" />
+        </font>
+    </Text>
+    <MenuButton layoutX="232.0" layoutY="230.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="148.0" text="MenuButton">
+        <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+        </items>
+    </MenuButton>
+    <MenuButton layoutX="409.0" layoutY="230.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="148.0" text="MenuButton">
+        <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+        </items>
+    </MenuButton>
+    <MenuButton layoutX="233.0" layoutY="262.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="148.0" text="MenuButton">
+        <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+        </items>
+    </MenuButton>
+    <MenuButton layoutX="233.0" layoutY="295.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="148.0" text="MenuButton">
+        <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+        </items>
+    </MenuButton>
+    <MenuButton layoutX="431.0" layoutY="334.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="MenuButton">
+        <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+        </items>
+    </MenuButton>
+    <MenuButton layoutX="557.0" layoutY="334.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="MenuButton">
+        <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+        </items>
+    </MenuButton>
+</AnchorPane>

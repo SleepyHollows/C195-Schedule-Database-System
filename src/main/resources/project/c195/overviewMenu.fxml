@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="overviewStage" minHeight="0.0" minWidth="0.0" prefHeight="548.0" prefWidth="864.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.c195.controller.overviewMenuController">
+    <TableView fx:id="customersTable" layoutX="21.0" layoutY="80.0" prefHeight="170.0" prefWidth="820.0">
+        <columns>
+            <TableColumn fx:id="customerIDCol" prefWidth="78.39999008178711" text="ID" />
+            <TableColumn fx:id="customerNameCol" prefWidth="182.40003967285156" text="Name" />
+            <TableColumn fx:id="customerAddressCol" prefWidth="262.39996337890625" text="Address" />
+            <TableColumn fx:id="customerPostCol" prefWidth="74.4000244140625" text="Postal Code" />
+            <TableColumn fx:id="customerPhoneCol" minWidth="0.0" prefWidth="127.20001220703125" text="Phone" />
+            <TableColumn fx:id="customerDivIDCol" prefWidth="98.4000244140625" text="Division ID" />
+        </columns>
+    </TableView>
+    <Text layoutX="21.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="C195 - Schedule Management System">
+        <font>
+            <Font size="27.0" />
+        </font>
+    </Text>
+    <Text layoutX="21.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customers">
+        <font>
+            <Font size="16.0" />
+        </font>
+    </Text>
+    <TableView fx:id="appointmentTable" layoutX="21.0" layoutY="312.0" prefHeight="170.0" prefWidth="820.0">
+        <columns>
+            <TableColumn fx:id="appIDCol" prefWidth="51.999996185302734" text="App ID" />
+            <TableColumn fx:id="titleCol" prefWidth="131.19998168945312" text="Title" />
+            <TableColumn fx:id="appointmentCustomerIDCol" prefWidth="75.19996643066406" text="Customer ID" />
+            <TableColumn fx:id="appointmentContactIDCol" prefWidth="65.60003662109375" text="Contact ID" />
+            <TableColumn fx:id="appointmentDescriptionCol" minWidth="0.0" prefWidth="152.79998779296875" text="Description" />
+            <TableColumn fx:id="appointmentLocationCol" minWidth="0.0" prefWidth="105.5999755859375" text="Location" />
+            <TableColumn fx:id="appointmentTypeCol" prefWidth="88.00006103515625" text="Type" />
+            <TableColumn fx:id="appointmentStartCol" prefWidth="78.39990234375" text="Start" />
+            <TableColumn fx:id="appointmentEndCol" prefWidth="73.60009765625" text="End" />
+        </columns>
+    </TableView>
+    <Text layoutX="21.0" layoutY="306.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Appointments">
+        <font>
+            <Font size="16.0" />
+        </font>
+    </Text>
+    <Button fx:id="addCustomerBtn" layoutX="405.0" layoutY="250.0" mnemonicParsing="false" onAction="#openAddCustomerMenu" prefHeight="26.0" prefWidth="130.0" text="Add Customer" />
+    <Button fx:id="updateCustomerBtn" layoutX="551.0" layoutY="250.0" mnemonicParsing="false" onAction="#openEditCustomerMenu" prefHeight="26.0" prefWidth="130.0" text="Update Customer" />
+    <Button fx:id="deleteCustomerBtn" layoutX="695.0" layoutY="250.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="130.0" text="Delete Customer" />
+    <Button fx:id="addAppointmentBtn" layoutX="405.0" layoutY="482.0" mnemonicParsing="false" onAction="#openAddAppointmentMenu" prefHeight="26.0" prefWidth="130.0" text="Add Appointment" />
+    <Button fx:id="updateAppointmentBtn" layoutX="551.0" layoutY="482.0" mnemonicParsing="false" onAction="#openEditAppointmentMenu" prefHeight="26.0" prefWidth="130.0" text="Update Appointment" />
+    <Button fx:id="deleteAppointmentBtn" layoutX="695.0" layoutY="482.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="130.0" text="Delete Appointment" />
+    <RadioButton fx:id="viewMonthRadioBtn" layoutX="285.0" layoutY="291.0" mnemonicParsing="false" text="View by Month">
+        <font>
+            <Font size="10.0" />
+        </font>
+    </RadioButton>
+    <RadioButton fx:id="viewAllRadioBtn" layoutX="131.0" layoutY="291.0" mnemonicParsing="false" text="View All">
+        <font>
+            <Font size="10.0" />
+        </font>
+    </RadioButton>
+    <RadioButton fx:id="viewCustomerRadioBtn" layoutX="381.0" layoutY="291.0" mnemonicParsing="false" text="View by Customer">
+        <font>
+            <Font size="10.0" />
+        </font>
+    </RadioButton>
+    <RadioButton fx:id="viewWeekRadioBtn" layoutX="196.0" layoutY="291.0" mnemonicParsing="false" text="View by Week">
+        <font>
+            <Font size="10.0" />
+        </font>
+    </RadioButton>
+    <TextField fx:id="searchTextField" layoutX="590.0" layoutY="287.0" prefHeight="26.0" prefWidth="163.0" promptText="Search for an Appointment" />
+    <Button fx:id="searchBtn" layoutX="753.0" layoutY="287.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="52.0" text="Search" />
+   <Button layoutX="21.0" layoutY="482.0" mnemonicParsing="false" onAction="#openReportsMenu" prefHeight="26.0" prefWidth="130.0" text="Open Reports" />
+</AnchorPane>
