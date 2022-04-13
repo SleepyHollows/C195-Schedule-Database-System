@@ -1,7 +1,9 @@
 package project.c195.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -9,5 +11,9 @@ public class editAppointmentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+    }
+
+    public void openOverviewMenu(ActionEvent event) throws IOException {
+        sceneController.switchScreen(event, "/project/c195/overviewMenu.fxml");
     }
 }

@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="478.0" prefWidth="481.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.c195.controller.loginMenuController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="478.0" prefWidth="481.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.c195.controller.editCustomerController">
     <TextField layoutX="212.0" layoutY="120.0" />
     <TextField layoutX="212.0" layoutY="167.0" />
     <TextField layoutX="212.0" layoutY="299.0" />

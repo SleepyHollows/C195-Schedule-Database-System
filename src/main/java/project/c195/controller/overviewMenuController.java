@@ -3,14 +3,9 @@ package project.c195.controller;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
-import project.c195.Main;
 import project.c195.helpers.appointmentDataSQL;
 import project.c195.helpers.customerDataSQL;
 import project.c195.model.appointmentData;
@@ -94,7 +89,7 @@ public class overviewMenuController implements Initializable {
         customerPostCol.setCellValueFactory(new PropertyValueFactory<customerData, String>("postalCode"));
         customerDivIDCol.setCellValueFactory(new PropertyValueFactory<customerData, Integer>("divID"));
 
-        customerList = customerDataSQL.getCustomerData();
+        customerList = customerDataSQL.getCustomerTableData();
         customersTable.setItems(customerList);
 
         appointmentAppIDCol.setCellValueFactory(new PropertyValueFactory<appointmentData, Integer>("appointmentID"));
@@ -112,43 +107,23 @@ public class overviewMenuController implements Initializable {
     }
 
     public void openAddCustomerMenu(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("addCustomerMenu.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
-        Stage overviewStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        overviewStage.setScene(scene);
-        overviewStage.show();
+        sceneController.switchScreen(event, "/project/c195/addCustomerMenu.fxml");
     }
 
     public void openEditCustomerMenu(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("editCustomerMenu.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
-        Stage overviewStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        overviewStage.setScene(scene);
-        overviewStage.show();
+        sceneController.switchScreen(event, "/project/c195/editCustomerMenu.fxml");
     }
 
 
     public void openAddAppointmentMenu(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("addAppointmentMenu.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
-        Stage overviewStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        overviewStage.setScene(scene);
-        overviewStage.show();
+        sceneController.switchScreen(event, "/project/c195/addAppointmentMenu.fxml");
     }
 
     public void openEditAppointmentMenu(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("editAppointmentMenu.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
-        Stage overviewStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        overviewStage.setScene(scene);
-        overviewStage.show();
+        sceneController.switchScreen(event, "/project/c195/editAppointmentMenu.fxml");
     }
 
     public void openReportsMenu(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("reportsMenu.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
-        Stage overviewStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        overviewStage.setScene(scene);
-        overviewStage.show();
+        sceneController.switchScreen(event, "/project/c195/reportsMenu.fxml");
     }
 }

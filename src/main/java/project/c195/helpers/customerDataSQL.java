@@ -6,9 +6,10 @@ import project.c195.model.customerData;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class customerDataSQL {
-    public static ObservableList<customerData> getCustomerData() {
+    public static ObservableList<customerData> getCustomerTableData() {
         ObservableList<customerData> list = FXCollections.observableArrayList();
         try {
             PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, Division_ID FROM customers");

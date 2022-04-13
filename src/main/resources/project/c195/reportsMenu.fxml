@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="527.0" prefWidth="871.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.c195.controller.loginMenuController">
-    <TableView layoutX="21.0" layoutY="48.0" prefHeight="82.0" prefWidth="820.0">
-        <columns>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="749.0" prefWidth="901.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.c195.controller.reportsMenuController">
+   <children>
+      <TableView layoutX="22.0" layoutY="41.0" prefHeight="140.0" prefWidth="856.0">
+         <columns>
             <TableColumn prefWidth="51.999996185302734" text="App ID" />
             <TableColumn prefWidth="131.19998168945312" text="Title" />
             <TableColumn prefWidth="75.19996643066406" text="Customer ID" />
@@ -16,79 +23,80 @@
             <TableColumn prefWidth="88.00006103515625" text="Type" />
             <TableColumn prefWidth="78.39990234375" text="Start" />
             <TableColumn prefWidth="73.60009765625" text="End" />
-        </columns>
-    </TableView>
-    <TableView layoutX="21.0" layoutY="165.0" prefHeight="82.0" prefWidth="820.0">
-        <columns>
-            <TableColumn prefWidth="51.999996185302734" text="App ID" />
-            <TableColumn prefWidth="131.19998168945312" text="Title" />
-            <TableColumn prefWidth="75.19996643066406" text="Customer ID" />
-            <TableColumn prefWidth="65.60003662109375" text="Contact ID" />
-            <TableColumn minWidth="0.0" prefWidth="152.79998779296875" text="Description" />
-            <TableColumn minWidth="0.0" prefWidth="105.5999755859375" text="Location" />
-            <TableColumn prefWidth="88.00006103515625" text="Type" />
-            <TableColumn prefWidth="78.39990234375" text="Start" />
-            <TableColumn prefWidth="73.60009765625" text="End" />
-        </columns>
-    </TableView>
-    <TableView layoutX="21.0" layoutY="287.0" prefHeight="82.0" prefWidth="820.0">
-        <columns>
-            <TableColumn prefWidth="51.999996185302734" text="App ID" />
-            <TableColumn prefWidth="131.19998168945312" text="Title" />
-            <TableColumn prefWidth="75.19996643066406" text="Customer ID" />
-            <TableColumn prefWidth="65.60003662109375" text="Contact ID" />
-            <TableColumn minWidth="0.0" prefWidth="152.79998779296875" text="Description" />
-            <TableColumn minWidth="0.0" prefWidth="105.5999755859375" text="Location" />
-            <TableColumn prefWidth="88.00006103515625" text="Type" />
-            <TableColumn prefWidth="78.39990234375" text="Start" />
-            <TableColumn prefWidth="73.60009765625" text="End" />
-        </columns>
-    </TableView>
-    <TableView layoutX="21.0" layoutY="404.0" prefHeight="82.0" prefWidth="820.0">
-        <columns>
-            <TableColumn prefWidth="51.999996185302734" text="App ID" />
-            <TableColumn prefWidth="131.19998168945312" text="Title" />
-            <TableColumn prefWidth="75.19996643066406" text="Customer ID" />
-            <TableColumn prefWidth="65.60003662109375" text="Contact ID" />
-            <TableColumn minWidth="0.0" prefWidth="152.79998779296875" text="Description" />
-            <TableColumn minWidth="0.0" prefWidth="105.5999755859375" text="Location" />
-            <TableColumn prefWidth="88.00006103515625" text="Type" />
-            <TableColumn prefWidth="78.39990234375" text="Start" />
-            <TableColumn prefWidth="73.60009765625" text="End" />
-        </columns>
-    </TableView>
-    <Text layoutX="21.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="C195 - Reports">
-        <font>
+         </columns>
+      </TableView>
+      <Text layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="C195 - Reports">
+         <font>
             <Font size="15.0" />
-        </font>
-    </Text>
-    <Text layoutX="743.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Count: " />
-    <Text layoutX="743.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Count: " />
-    <Text layoutX="743.0" layoutY="289.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Count: " />
-    <Text layoutX="743.0" layoutY="399.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Count: " />
-    <MenuButton layoutX="635.0" layoutY="22.0" mnemonicParsing="false" text="MenuButton">
-        <items>
+         </font>
+      </Text>
+      <TableView layoutX="22.0" layoutY="219.0" prefHeight="140.0" prefWidth="856.0">
+         <columns>
+            <TableColumn prefWidth="51.999996185302734" text="App ID" />
+            <TableColumn prefWidth="131.19998168945312" text="Title" />
+            <TableColumn prefWidth="75.19996643066406" text="Customer ID" />
+            <TableColumn prefWidth="65.60003662109375" text="Contact ID" />
+            <TableColumn minWidth="0.0" prefWidth="152.79998779296875" text="Description" />
+            <TableColumn minWidth="0.0" prefWidth="105.5999755859375" text="Location" />
+            <TableColumn prefWidth="88.00006103515625" text="Type" />
+            <TableColumn prefWidth="78.39990234375" text="Start" />
+            <TableColumn prefWidth="73.60009765625" text="End" />
+         </columns>
+      </TableView>
+      <TableView layoutX="22.0" layoutY="400.0" prefHeight="140.0" prefWidth="856.0">
+         <columns>
+            <TableColumn prefWidth="51.999996185302734" text="App ID" />
+            <TableColumn prefWidth="131.19998168945312" text="Title" />
+            <TableColumn prefWidth="75.19996643066406" text="Customer ID" />
+            <TableColumn prefWidth="65.60003662109375" text="Contact ID" />
+            <TableColumn minWidth="0.0" prefWidth="152.79998779296875" text="Description" />
+            <TableColumn minWidth="0.0" prefWidth="105.5999755859375" text="Location" />
+            <TableColumn prefWidth="88.00006103515625" text="Type" />
+            <TableColumn prefWidth="78.39990234375" text="Start" />
+            <TableColumn prefWidth="73.60009765625" text="End" />
+         </columns>
+      </TableView>
+      <TableView layoutX="22.0" layoutY="573.0" prefHeight="140.0" prefWidth="856.0">
+         <columns>
+            <TableColumn prefWidth="51.999996185302734" text="App ID" />
+            <TableColumn prefWidth="131.19998168945312" text="Title" />
+            <TableColumn prefWidth="75.19996643066406" text="Customer ID" />
+            <TableColumn prefWidth="65.60003662109375" text="Contact ID" />
+            <TableColumn minWidth="0.0" prefWidth="152.79998779296875" text="Description" />
+            <TableColumn minWidth="0.0" prefWidth="105.5999755859375" text="Location" />
+            <TableColumn prefWidth="88.00006103515625" text="Type" />
+            <TableColumn prefWidth="78.39990234375" text="Start" />
+            <TableColumn prefWidth="73.60009765625" text="End" />
+         </columns>
+      </TableView>
+      <MenuButton layoutX="646.0" layoutY="11.0" mnemonicParsing="false" text="MenuButton">
+         <items>
             <MenuItem mnemonicParsing="false" text="Action 1" />
             <MenuItem mnemonicParsing="false" text="Action 2" />
-        </items>
-    </MenuButton>
-    <MenuButton layoutX="635.0" layoutY="137.0" mnemonicParsing="false" text="MenuButton">
-        <items>
+         </items>
+      </MenuButton>
+      <MenuButton layoutX="646.0" layoutY="193.0" mnemonicParsing="false" text="MenuButton">
+         <items>
             <MenuItem mnemonicParsing="false" text="Action 1" />
             <MenuItem mnemonicParsing="false" text="Action 2" />
-        </items>
-    </MenuButton>
-    <MenuButton layoutX="635.0" layoutY="261.0" mnemonicParsing="false" text="MenuButton">
-        <items>
+         </items>
+      </MenuButton>
+      <MenuButton layoutX="646.0" layoutY="374.0" mnemonicParsing="false" text="MenuButton">
+         <items>
             <MenuItem mnemonicParsing="false" text="Action 1" />
             <MenuItem mnemonicParsing="false" text="Action 2" />
-        </items>
-    </MenuButton>
-    <MenuButton layoutX="635.0" layoutY="380.0" mnemonicParsing="false" text="MenuButton">
-        <items>
+         </items>
+      </MenuButton>
+      <MenuButton layoutX="646.0" layoutY="547.0" mnemonicParsing="false" text="MenuButton">
+         <items>
             <MenuItem mnemonicParsing="false" text="Action 1" />
             <MenuItem mnemonicParsing="false" text="Action 2" />
-        </items>
-    </MenuButton>
-   <Button layoutX="731.0" layoutY="486.0" mnemonicParsing="false" onAction="#openOverviewMenu" prefHeight="26.0" prefWidth="110.0" text="Back to overview" />
+         </items>
+      </MenuButton>
+      <Text layoutX="759.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Count: " />
+      <Text layoutX="759.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Count: " />
+      <Text layoutX="759.0" layoutY="400.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Count: " />
+      <Text layoutX="759.0" layoutY="573.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Count: " />
+      <Button layoutX="767.0" layoutY="713.0" mnemonicParsing="false" onAction="#openOverviewMenu" prefHeight="26.0" prefWidth="110.0" text="Back to overview" />
+   </children>
 </AnchorPane>
