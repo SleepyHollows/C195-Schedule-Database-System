@@ -7,5 +7,7 @@ module project.c195 {
     opens project.c195 to javafx.fxml;
     exports project.c195;
     exports project.c195.controller;
+    exports project.c195.helpers;
+    exports project.c195.model;
     opens project.c195.controller to javafx.fxml;
 }

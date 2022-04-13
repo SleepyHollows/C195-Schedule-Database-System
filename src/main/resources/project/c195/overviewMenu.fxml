@@ -27,8 +27,8 @@
     </Text>
     <TableView fx:id="appointmentTable" layoutX="21.0" layoutY="312.0" prefHeight="170.0" prefWidth="820.0">
         <columns>
-            <TableColumn fx:id="appIDCol" prefWidth="51.999996185302734" text="App ID" />
-            <TableColumn fx:id="titleCol" prefWidth="131.19998168945312" text="Title" />
+            <TableColumn fx:id="appointmentAppIDCol" prefWidth="51.999996185302734" text="App ID" />
+            <TableColumn fx:id="appointmentTitleCol" prefWidth="131.19998168945312" text="Title" />
             <TableColumn fx:id="appointmentCustomerIDCol" prefWidth="75.19996643066406" text="Customer ID" />
             <TableColumn fx:id="appointmentContactIDCol" prefWidth="65.60003662109375" text="Contact ID" />
             <TableColumn fx:id="appointmentDescriptionCol" minWidth="0.0" prefWidth="152.79998779296875" text="Description" />

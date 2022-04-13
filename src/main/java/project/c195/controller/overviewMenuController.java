@@ -1,5 +1,6 @@
 package project.c195.controller;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,9 +8,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import project.c195.Main;
+import project.c195.helpers.appointmentDataSQL;
+import project.c195.helpers.customerDataSQL;
+import project.c195.model.appointmentData;
+import project.c195.model.customerData;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,19 +23,19 @@ import java.util.ResourceBundle;
 public class overviewMenuController implements Initializable {
 
     @FXML
-    private TableView customersTable;
+    private TableView<customerData> customersTable;
     @FXML
-    private TableColumn customerIDCol;
+    private TableColumn<customerData, Integer> customerIDCol;
     @FXML
-    private TableColumn customerNameCol;
+    private TableColumn<customerData, String> customerNameCol;
     @FXML
-    private TableColumn customerAddressCol;
+    private TableColumn<customerData, String> customerAddressCol;
     @FXML
-    private TableColumn customerPostCol;
+    private TableColumn<customerData, String> customerPostCol;
     @FXML
-    private TableColumn customerPhoneCol;
+    private TableColumn<customerData, String> customerPhoneCol;
     @FXML
-    private TableColumn customerDivIDCol;
+    private TableColumn<customerData, Integer> customerDivIDCol;
     @FXML
     private Button addCustomerBtn;
     @FXML
@@ -50,25 +56,25 @@ public class overviewMenuController implements Initializable {
     @FXML
     private Button searchBtn;
     @FXML
-    private TableView appointmentTable;
+    private TableView<appointmentData> appointmentTable;
     @FXML
-    private TableColumn appIDCol;
+    private TableColumn<appointmentData, Integer> appointmentAppIDCol;
     @FXML
-    private TableColumn titleCol;
+    private TableColumn<appointmentData, String> appointmentTitleCol;
     @FXML
-    private TableColumn appointmentCustomerIDCol;
+    private TableColumn<appointmentData, Integer> appointmentCustomerIDCol;
     @FXML
-    private TableColumn appointmentContactIDCol;
+    private TableColumn<appointmentData, Integer> appointmentContactIDCol;
     @FXML
-    private TableColumn appointmentDescriptionCol;
+    private TableColumn<appointmentData, String> appointmentDescriptionCol;
     @FXML
-    private TableColumn appointmentLocationCol;
+    private TableColumn<appointmentData, String> appointmentLocationCol;
     @FXML
-    private TableColumn appointmentTypeCol;
+    private TableColumn<appointmentData, String> appointmentTypeCol;
     @FXML
-    private TableColumn appointmentStartCol;
+    private TableColumn<appointmentData, String> appointmentStartCol;
     @FXML
-    private TableColumn appointmentEndCol;
+    private TableColumn<appointmentData, String> appointmentEndCol;
     @FXML
     private Button addAppointmentBtn;
     @FXML
@@ -76,12 +82,36 @@ public class overviewMenuController implements Initializable {
     @FXML
     private Button deleteAppointmentBtn;
 
+    ObservableList<customerData> customerList;
+    ObservableList<appointmentData> appointmentList;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        customerIDCol.setCellValueFactory(new PropertyValueFactory<customerData, Integer>("id"));
+        customerNameCol.setCellValueFactory(new PropertyValueFactory<customerData, String>("name"));
+        customerAddressCol.setCellValueFactory(new PropertyValueFactory<customerData, String>("address"));
+        customerPhoneCol.setCellValueFactory(new PropertyValueFactory<customerData, String>("phone"));
+        customerPostCol.setCellValueFactory(new PropertyValueFactory<customerData, String>("postalCode"));
+        customerDivIDCol.setCellValueFactory(new PropertyValueFactory<customerData, Integer>("divID"));
 
+        customerList = customerDataSQL.getCustomerData();
+        customersTable.setItems(customerList);
+
+        appointmentAppIDCol.setCellValueFactory(new PropertyValueFactory<appointmentData, Integer>("appointmentID"));
+        appointmentTitleCol.setCellValueFactory(new PropertyValueFactory<appointmentData, String>("title"));
+        appointmentCustomerIDCol.setCellValueFactory(new PropertyValueFactory<appointmentData, Integer>("customerID"));
+        appointmentContactIDCol.setCellValueFactory(new PropertyValueFactory<appointmentData, Integer>("contactID"));
+        appointmentDescriptionCol.setCellValueFactory(new PropertyValueFactory<appointmentData, String>("description"));
+        appointmentLocationCol.setCellValueFactory(new PropertyValueFactory<appointmentData, String>("location"));
+        appointmentTypeCol.setCellValueFactory(new PropertyValueFactory<appointmentData, String>("type"));
+        appointmentStartCol.setCellValueFactory(new PropertyValueFactory<appointmentData, String>("start"));
+        appointmentEndCol.setCellValueFactory(new PropertyValueFactory<appointmentData, String>("end"));
+
+        appointmentList = appointmentDataSQL.getAppointmentData();
+        appointmentTable.setItems(appointmentList);
     }
 
-    public static void openAddCustomerMenu(ActionEvent event) throws IOException {
+    public void openAddCustomerMenu(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("addCustomerMenu.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
         Stage overviewStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
