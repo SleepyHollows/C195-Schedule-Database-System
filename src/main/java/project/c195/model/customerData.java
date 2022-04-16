@@ -2,6 +2,9 @@ package project.c195.model;
 
 public class customerData {
 
+    int id, divID;
+    String name, address, postalCode, phone;
+
     public int getId() {
         return id;
     }
@@ -49,10 +52,6 @@ public class customerData {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
-    int id, divID;
-    String name, address, postalCode, phone;
-
 
     public customerData(int id, String name, String address, String postalCode, String phone, int divID) {
         this.id = id;

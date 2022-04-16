@@ -14,6 +14,6 @@ public class editAppointmentController implements Initializable {
     }
 
     public void openOverviewMenu(ActionEvent event) throws IOException {
-        sceneController.switchScreen(event, "/project/c195/overviewMenu.fxml");
+        sceneController.switchScreen(event, "overviewMenu.fxml");
     }
 }

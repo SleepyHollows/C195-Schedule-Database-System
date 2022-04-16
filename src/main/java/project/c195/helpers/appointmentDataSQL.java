@@ -3,11 +3,11 @@ package project.c195.helpers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import project.c195.model.appointmentData;
-import project.c195.model.customerData;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Random;
 
 public class appointmentDataSQL {
     public static ObservableList<appointmentData> getAppointmentData() {
@@ -31,11 +31,12 @@ public class appointmentDataSQL {
         return list;
     }
 
-    public static void appointmentInsertSQL(
+    public static void appointmentInsertSQL (
             int customerID,
             int appointmentID,
+            int userID,
             int contactID,
-            int userID, String title,
+            String title,
             String description,
             String location,
             String type,
@@ -43,8 +44,7 @@ public class appointmentDataSQL {
             String end
     ) {
         try {
-            String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, " +
-                    "User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ps.setInt(1, appointmentID);
             ps.setString(2, title);
@@ -61,5 +61,23 @@ public class appointmentDataSQL {
         catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    public static int getAppointmentID() {
+        Random rnd = new Random();
+        int appointmentID = rnd.nextInt(999999);
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Appointment_ID FROM appointments");
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                if(appointmentID == rs.getInt("Appointment_ID")) {
+                    appointmentID++;
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return appointmentID;
     }
 }
