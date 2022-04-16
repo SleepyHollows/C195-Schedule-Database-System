@@ -80,4 +80,24 @@ public class appointmentDataSQL {
         }
         return appointmentID;
     }
+
+    public static void appointmentDeleteSQL(int selectedAppointment) {
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("DELETE FROM appointments WHERE Appointment_ID ='" + selectedAppointment + "'");
+            ps.executeUpdate();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void customerAppointmentDeleteSQL(int selectedCustomer) {
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("DELETE FROM appointments WHERE Customer_ID ='" + selectedCustomer + "'");
+            ps.executeUpdate();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

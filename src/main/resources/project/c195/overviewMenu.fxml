@@ -45,10 +45,10 @@
     </Text>
     <Button fx:id="addCustomerBtn" layoutX="405.0" layoutY="250.0" mnemonicParsing="false" onAction="#openAddCustomerMenu" prefHeight="26.0" prefWidth="130.0" text="Add Customer" />
     <Button fx:id="updateCustomerBtn" layoutX="551.0" layoutY="250.0" mnemonicParsing="false" onAction="#openEditCustomerMenu" prefHeight="26.0" prefWidth="130.0" text="Update Customer" />
-    <Button fx:id="deleteCustomerBtn" layoutX="695.0" layoutY="250.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="130.0" text="Delete Customer" />
+    <Button fx:id="deleteCustomerBtn" layoutX="695.0" layoutY="250.0" mnemonicParsing="false" onAction="#deleteCustomer" prefHeight="26.0" prefWidth="130.0" text="Delete Customer" />
     <Button fx:id="addAppointmentBtn" layoutX="405.0" layoutY="482.0" mnemonicParsing="false" onAction="#openAddAppointmentMenu" prefHeight="26.0" prefWidth="130.0" text="Add Appointment" />
     <Button fx:id="updateAppointmentBtn" layoutX="551.0" layoutY="482.0" mnemonicParsing="false" onAction="#openEditAppointmentMenu" prefHeight="26.0" prefWidth="130.0" text="Update Appointment" />
-    <Button fx:id="deleteAppointmentBtn" layoutX="695.0" layoutY="482.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="130.0" text="Delete Appointment" />
+    <Button fx:id="deleteAppointmentBtn" layoutX="695.0" layoutY="482.0" mnemonicParsing="false" onAction="#deleteAppointment" prefHeight="26.0" prefWidth="130.0" text="Delete Appointment" />
     <RadioButton fx:id="viewMonthRadioBtn" layoutX="285.0" layoutY="291.0" mnemonicParsing="false" text="View by Month">
         <font>
             <Font size="10.0" />

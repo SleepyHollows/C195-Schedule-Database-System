@@ -72,4 +72,14 @@ public class customerDataSQL {
         }
         return customerID;
     }
+
+    public static void customerDeleteSQL(int selectedCustomer) {
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("DELETE FROM customers WHERE Customer_ID ='" + selectedCustomer + "'");
+            ps.executeUpdate();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

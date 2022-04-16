@@ -126,4 +126,17 @@ public class overviewMenuController implements Initializable {
     public void openReportsMenu(ActionEvent event) throws IOException {
         sceneController.switchScreen(event, "/project/c195/reportsMenu.fxml");
     }
+
+    public void deleteAppointment(ActionEvent event) throws IOException {
+        appointmentData selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
+        appointmentDataSQL.appointmentDeleteSQL(selectedAppointment.getAppointmentID());
+        sceneController.switchScreen(event, "overviewMenu.fxml");
+    }
+
+    public void deleteCustomer(ActionEvent event) throws IOException {
+        customerData selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
+        appointmentDataSQL.customerAppointmentDeleteSQL(selectedCustomer.getId());
+        customerDataSQL.customerDeleteSQL(selectedCustomer.getId());
+        sceneController.switchScreen(event, "overviewMenu.fxml");
+    }
 }
