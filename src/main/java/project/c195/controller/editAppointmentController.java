@@ -9,11 +9,14 @@ import javafx.scene.control.TextField;
 import project.c195.helpers.appointmentDataSQL;
 import project.c195.helpers.contactsDataSQL;
 import project.c195.helpers.divisionsDataSQL;
+import project.c195.helpers.usersDataSQL;
 import project.c195.model.appointmentData;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
@@ -88,6 +91,20 @@ public class editAppointmentController implements Initializable {
     }
 
     public void setData(appointmentData selectedAppointment) {
+        ZonedDateTime startDateTimeUTC = selectedAppointment.getStart().toInstant().atZone(ZoneOffset.UTC);
+        ZonedDateTime endDateTimeUTC = selectedAppointment.getEnd().toInstant().atZone(ZoneOffset.UTC);
+
+        DateTimeFormatter hourFormat = DateTimeFormatter.ofPattern("HH");
+        DateTimeFormatter minFormat = DateTimeFormatter.ofPattern("mm");
+
+        ZonedDateTime localStartDateTime = startDateTimeUTC.withZoneSameInstant(usersDataSQL.getUserTimeZone());
+        ZonedDateTime localEndDateTime = endDateTimeUTC.withZoneSameInstant(usersDataSQL.getUserTimeZone());
+
+        String localStartHour = localStartDateTime.format(hourFormat);
+        String localStartMin = localStartDateTime.format(minFormat);
+        String localEndHour = localEndDateTime.format(hourFormat);
+        String localEndMin = localEndDateTime.format(minFormat);
+
         customerIDBox.setText(String.valueOf(selectedAppointment.getCustomerID()));
         userIDBox.setText(String.valueOf(selectedAppointment.getUserID()));
         titleBox.setText(selectedAppointment.getTitle());
@@ -96,6 +113,10 @@ public class editAppointmentController implements Initializable {
         dateBox.setValue(selectedAppointment.getStart().toLocalDateTime().toLocalDate());
         contactDropDown.setValue(contactsDataSQL.getContactsNameByID(selectedAppointment.getContactID()));
         typeDropDown.setValue(selectedAppointment.getType());
+        startHourDropDown.setValue(localStartHour);
+        startMinDropDown.setValue(localStartMin);
+        endHourDropDown.setValue(localEndHour);
+        endMinDropDown.setValue(localEndMin);
 
     }
 
@@ -113,6 +134,8 @@ public class editAppointmentController implements Initializable {
         appointmentDataSQL.updateAppointmentSQL(title, description, location, type, start, end, contactID, appointmentID);
         sceneController.switchScreen(event, "overviewMenu.fxml");
     }
+
+
 }
 
 
