@@ -19,7 +19,7 @@ public class editCustomerController implements Initializable {
     private TextField addressBox;
 
     @FXML
-    private ComboBox<?> countryDropDown;
+    private ComboBox<String> countryDropDown;
 
     @FXML
     private TextField customerIDBox;
@@ -34,7 +34,7 @@ public class editCustomerController implements Initializable {
     private TextField postalBox;
 
     @FXML
-    private ComboBox<?> stateDropDown;
+    private ComboBox<String> stateDropDown;
 
     String address;
     String name;
@@ -70,5 +70,6 @@ public class editCustomerController implements Initializable {
         addressBox.setText(selectedCustomer.getAddress());
         postalBox.setText(selectedCustomer.getPostalCode());
         phoneBox.setText(selectedCustomer.getPhone());
+        stateDropDown.setValue(divisionsDataSQL.getDivisionNameByID(selectedCustomer.getDivID()));
     }
 }

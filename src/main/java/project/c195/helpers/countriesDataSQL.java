@@ -37,4 +37,16 @@ public class countriesDataSQL {
         }
         return list;
     }
+
+    public static String getCountryNameByDivID(String divID) {
+        String countryName = "";
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Country FROM countries WHERE Div");
+            ResultSet rs = ps.executeQuery();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return countryName;
+    }
 }

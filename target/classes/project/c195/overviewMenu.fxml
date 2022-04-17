@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="overviewStage" minHeight="0.0" minWidth="0.0" prefHeight="548.0" prefWidth="864.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.c195.controller.overviewMenuController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="548.0" prefWidth="864.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.c195.controller.overviewMenuController">
     <TableView fx:id="customersTable" layoutX="21.0" layoutY="80.0" prefHeight="170.0" prefWidth="820.0">
         <columns>
             <TableColumn fx:id="customerIDCol" prefWidth="78.39999008178711" text="ID" />
@@ -28,14 +28,14 @@
     <TableView fx:id="appointmentTable" layoutX="21.0" layoutY="312.0" prefHeight="170.0" prefWidth="820.0">
         <columns>
             <TableColumn fx:id="appointmentAppIDCol" prefWidth="51.999996185302734" text="App ID" />
-            <TableColumn fx:id="appointmentTitleCol" prefWidth="131.19998168945312" text="Title" />
-            <TableColumn fx:id="appointmentCustomerIDCol" prefWidth="75.19996643066406" text="Customer ID" />
-            <TableColumn fx:id="appointmentContactIDCol" prefWidth="65.60003662109375" text="Contact ID" />
-            <TableColumn fx:id="appointmentDescriptionCol" minWidth="0.0" prefWidth="152.79998779296875" text="Description" />
-            <TableColumn fx:id="appointmentLocationCol" minWidth="0.0" prefWidth="100.0" text="Location" />
-            <TableColumn fx:id="appointmentTypeCol" prefWidth="87.0" text="Type" />
-            <TableColumn fx:id="appointmentStartCol" prefWidth="75.0" text="Start" />
-            <TableColumn fx:id="appointmentEndCol" prefWidth="86.0" text="End" />
+            <TableColumn fx:id="appointmentTitleCol" prefWidth="101.0" text="Title" />
+            <TableColumn fx:id="appointmentCustomerIDCol" prefWidth="77.0" text="Customer ID" />
+            <TableColumn fx:id="appointmentContactIDCol" prefWidth="64.0" text="Contact ID" />
+            <TableColumn fx:id="appointmentDescriptionCol" minWidth="0.0" prefWidth="150.0" text="Description" />
+            <TableColumn fx:id="appointmentLocationCol" minWidth="0.0" prefWidth="54.0" text="Location" />
+            <TableColumn fx:id="appointmentTypeCol" prefWidth="70.0" text="Type" />
+            <TableColumn fx:id="appointmentStartCol" prefWidth="125.0" text="Start" />
+            <TableColumn fx:id="appointmentEndCol" prefWidth="134.0" text="End" />
         </columns>
     </TableView>
     <Text layoutX="21.0" layoutY="306.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Appointments">
@@ -53,23 +53,26 @@
         <font>
             <Font size="10.0" />
         </font>
+      <toggleGroup>
+         <ToggleGroup fx:id="radioButton" />
+      </toggleGroup>
     </RadioButton>
-    <RadioButton fx:id="viewAllRadioBtn" layoutX="131.0" layoutY="291.0" mnemonicParsing="false" text="View All">
+    <RadioButton fx:id="viewAllRadioBtn" layoutX="131.0" layoutY="291.0" mnemonicParsing="false" selected="true" text="View All" toggleGroup="$radioButton">
         <font>
             <Font size="10.0" />
         </font>
     </RadioButton>
-    <RadioButton fx:id="viewCustomerRadioBtn" layoutX="381.0" layoutY="291.0" mnemonicParsing="false" text="View by Customer">
+    <RadioButton fx:id="viewCustomerRadioBtn" layoutX="381.0" layoutY="291.0" mnemonicParsing="false" text="View by Customer" toggleGroup="$radioButton">
         <font>
             <Font size="10.0" />
         </font>
     </RadioButton>
-    <RadioButton fx:id="viewWeekRadioBtn" layoutX="196.0" layoutY="291.0" mnemonicParsing="false" text="View by Week">
+    <RadioButton fx:id="viewWeekRadioBtn" layoutX="196.0" layoutY="291.0" mnemonicParsing="false" text="View by Week" toggleGroup="$radioButton">
         <font>
             <Font size="10.0" />
         </font>
     </RadioButton>
-    <TextField fx:id="searchTextField" layoutX="590.0" layoutY="287.0" prefHeight="26.0" prefWidth="163.0" promptText="Search for an Appointment" />
-    <Button fx:id="searchBtn" layoutX="753.0" layoutY="287.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="52.0" text="Search" />
+    <TextField fx:id="searchTextField" layoutX="590.0" layoutY="287.0" onAction="#searchAppointments" prefHeight="26.0" prefWidth="163.0" promptText="Search for an Appointment" />
+    <Button fx:id="searchBtn" layoutX="753.0" layoutY="287.0" mnemonicParsing="false" onAction="#searchAppointments" prefHeight="26.0" prefWidth="52.0" text="Search" />
    <Button layoutX="21.0" layoutY="482.0" mnemonicParsing="false" onAction="#openReportsMenu" prefHeight="26.0" prefWidth="130.0" text="Open Reports" />
 </AnchorPane>

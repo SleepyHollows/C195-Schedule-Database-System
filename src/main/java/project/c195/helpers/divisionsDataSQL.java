@@ -58,4 +58,19 @@ public class divisionsDataSQL {
         }
         return divisionID;
     }
+
+    public static String getDivisionNameByID(int divisionID) {
+        String divisionName = "";
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Division FROM first_level_divisions WHERE Division_ID = '" + divisionID + "'");
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                divisionName = rs.getString("Division");
+            }
+            return divisionName;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return divisionName;
+    }
 }

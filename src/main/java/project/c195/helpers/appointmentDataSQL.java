@@ -13,15 +13,21 @@ public class appointmentDataSQL {
     public static ObservableList<appointmentData> getAppointmentData() {
         ObservableList<appointmentData> list = FXCollections.observableArrayList();
         try {
-            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, Contact_ID FROM appointments");
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, Contact_ID, User_ID FROM appointments");
             ResultSet rs = ps.executeQuery();
-
             while(rs.next()) {
                 list.add (
-                        new appointmentData(rs.getInt("Customer_ID"), rs.getInt("Appointment_ID"),
-                                rs.getInt("Contact_ID"), rs.getString("Title"),
-                                rs.getString("Description"), rs.getString("Location"),
-                                rs.getString("Type"), rs.getString("Start"), rs.getString("End"))
+                        new appointmentData(
+                                rs.getInt("Customer_ID"),
+                                rs.getInt("Appointment_ID"),
+                                rs.getInt("User_ID"),
+                                rs.getInt("Contact_ID"),
+                                rs.getString("Title"),
+                                rs.getString("Description"),
+                                rs.getString("Location"),
+                                rs.getString("Type"),
+                                rs.getTimestamp("Start"),
+                                rs.getTimestamp("End"))
                 );
             }
         }
@@ -99,5 +105,63 @@ public class appointmentDataSQL {
         catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void updateAppointmentSQL(
+            String title,
+            String description,
+            String location,
+            String type,
+            String start,
+            String end,
+            int contactID,
+            int appointmentID
+    ) {
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("UPDATE appointments SET " +
+                    "Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
+                            "Contact_ID = ? WHERE Appointment_ID = '" + appointmentID + "'");
+            ps.setString(1, title);
+            ps.setString(2, description);
+            ps.setString(3, location);
+            ps.setString(4, type);
+            ps.setString(5, start);
+            ps.setString(6, end);
+            ps.setInt(7, contactID);
+            ps.executeUpdate();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ObservableList<appointmentData> searchAppointmentSQL (String searchTerm) {
+        ObservableList<appointmentData> list = FXCollections.observableArrayList();
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT * FROM appointments " +
+                    "WHERE Appointment_ID = '" + searchTerm +
+                    "' OR Title = '" + searchTerm + "' " +
+                    "OR Description = '" + searchTerm + "'");
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                list.add (
+                        new appointmentData(
+                                rs.getInt("Customer_ID"),
+                                rs.getInt("Appointment_ID"),
+                                rs.getInt("User_ID"),
+                                rs.getInt("Contact_ID"),
+                                rs.getString("Title"),
+                                rs.getString("Description"),
+                                rs.getString("Location"),
+                                rs.getString("Type"),
+                                rs.getTimestamp("Start"),
+                                rs.getTimestamp("End"))
+                );
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

@@ -76,4 +76,18 @@ public class contactsDataSQL {
         }
         return contactID;
     }
+    public static String getContactsNameByID(int contactID) {
+        String contactName = "";
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Contact_Name FROM contacts WHERE Contact_ID = '" + contactID + "'");
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                contactName = rs.getString("Contact_Name");
+            }
+            return contactName;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return contactName;
+    }
 }

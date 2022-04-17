@@ -6,21 +6,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import javafx.util.StringConverter;
 import project.c195.helpers.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
-import java.time.LocalDate;
 
 public class addAppointmentController implements Initializable {
 
     @FXML
-    private ComboBox contactDropDown;
+    private ComboBox<Integer> contactDropDown;
 
     @FXML
     private TextField customerIDBox;
@@ -29,22 +26,22 @@ public class addAppointmentController implements Initializable {
     private TextField descriptionBox;
 
     @FXML
-    private ComboBox divisionDropDown;
+    private ComboBox<Integer> divisionDropDown;
 
     @FXML
-    private ComboBox endHourDropDown;
+    private ComboBox<String> endHourDropDown;
 
     @FXML
-    private ComboBox endMinDropDown;
+    private ComboBox<String> endMinDropDown;
 
     @FXML
-    private ComboBox hourDropDown;
+    private ComboBox<String> hourDropDown;
 
     @FXML
-    private ComboBox locationDropDown;
+    private ComboBox<String> locationDropDown;
 
     @FXML
-    private ComboBox minDropDown;
+    private ComboBox<String> minDropDown;
 
     @FXML
     private DatePicker dateBox;
@@ -53,24 +50,10 @@ public class addAppointmentController implements Initializable {
     private TextField titleBox;
 
     @FXML
-    private ComboBox typeDropDown;
+    private ComboBox<String> typeDropDown;
 
     @FXML
     private TextField userIDBox;
-
-    public String getDate() {
-        LocalDate datePicked = dateBox.getValue();
-        String dateFormatting = datePicked.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        return dateFormatting;
-    }
-
-    public void setText(ActionEvent event) throws IOException {
-        locationDropDown.setPromptText(String.valueOf(locationDropDown.getContextMenu()));
-    }
-
-    public void openOverviewMenu(ActionEvent event) throws IOException {
-        sceneController.switchScreen(event, "overviewMenu.fxml");
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -79,20 +62,30 @@ public class addAppointmentController implements Initializable {
             locationDropDown.setItems(countriesDataSQL.getCountryName());
             typeDropDown.getItems().addAll("Medical", "Walk-in", "Misc");
             divisionDropDown.setItems(divisionsDataSQL.getDivisionName());
-            hourDropDown.getItems().addAll("08", "09", "10", "45");
+            hourDropDown.getItems().addAll("08", "09", "10", "11", "12", "1", "2", "3", "4");
             minDropDown.getItems().addAll("00", "15", "30", "45");
-            endHourDropDown.getItems().addAll("08", "09", "10", "45");
+            endHourDropDown.getItems().addAll("08", "09", "10", "11", "12", "1", "2", "3", "4");
             endMinDropDown.getItems().addAll("00", "15", "30", "45");
+            userIDBox.setText(String.valueOf(usersDataSQL.getCurrentUsers().getUserID()));
         }
         catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void addAppointment(ActionEvent event) throws IOException, SQLException {
+    public String getDate() {
+        LocalDate datePicked = dateBox.getValue();
+        return datePicked.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public void openOverviewMenu(ActionEvent event) throws IOException {
+        sceneController.switchScreen(event, "overviewMenu.fxml");
+    }
+
+    public void addAppointment(ActionEvent event) throws IOException {
         int customerID = Integer.parseInt(customerIDBox.getText());
         int appointmentID = appointmentDataSQL.getAppointmentID();
-        int userID = usersDataSQL.getCurrentUsers().getUserID();
+        int userID = Integer.parseInt(userIDBox.getText());
         int contactID = contactsDataSQL.getContactsIDByName(String.valueOf(contactDropDown.getSelectionModel().getSelectedItem()));
         String title  = titleBox.getText();
         String description = descriptionBox.getText();
