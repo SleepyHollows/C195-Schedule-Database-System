@@ -18,10 +18,15 @@ public class customerDataSQL {
 
             while(rs.next()) {
                 list.add(
-                        new customerData(rs.getInt("Customer_ID"),
-                                rs.getString("Customer_Name"), rs.getString("Address"),
-                                rs.getString("Postal_Code"), rs.getString("Phone"),
-                                rs.getInt("Division_ID")));
+                        new customerData(
+                                rs.getInt("Customer_ID"),
+                                rs.getString("Customer_Name"),
+                                rs.getString("Address"),
+                                rs.getString("Postal_Code"),
+                                rs.getString("Phone"),
+                                rs.getInt("Division_ID")
+                        )
+                );
             }
         }
         catch (Exception e) {
@@ -76,6 +81,30 @@ public class customerDataSQL {
     public static void customerDeleteSQL(int selectedCustomer) {
         try {
             PreparedStatement ps = JDBC.connection.prepareStatement("DELETE FROM customers WHERE Customer_ID ='" + selectedCustomer + "'");
+            ps.executeUpdate();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateCustomerSQL(
+            String name,
+            String address,
+            String postal,
+            String phone,
+            int divisionID,
+            int customerID
+    ) {
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("UPDATE customers SET " +
+                    "Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? " +
+                    "WHERE Customer_ID = '" + customerID + "'");
+            ps.setString(1, name);
+            ps.setString(2, address);
+            ps.setString(3, postal);
+            ps.setString(4, phone);
+            ps.setInt(5, divisionID);
             ps.executeUpdate();
         }
         catch(Exception e) {

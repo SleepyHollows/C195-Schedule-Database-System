@@ -3,9 +3,13 @@ package project.c195.controller;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import project.c195.helpers.appointmentDataSQL;
 import project.c195.helpers.customerDataSQL;
 import project.c195.model.appointmentData;
@@ -111,7 +115,15 @@ public class overviewMenuController implements Initializable {
     }
 
     public void openEditCustomerMenu(ActionEvent event) throws IOException {
-        sceneController.switchScreen(event, "/project/c195/editCustomerMenu.fxml");
+        customerData selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
+        Stage stage = (Stage) updateCustomerBtn.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/c195/editCustomerMenu.fxml"));
+        Parent root = loader.load();
+        editCustomerController controller = loader.getController();
+        controller.setData(selectedCustomer);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
 
