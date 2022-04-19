@@ -111,4 +111,21 @@ public class customerDataSQL {
             e.printStackTrace();
         }
     }
+
+    public static boolean verifyCustomerID(int customerID) {
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Customer_ID FROM customers WHERE Customer_ID = '" + customerID + "'");
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                if(!rs.next()) {
+                    return false;
+                }
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
 }

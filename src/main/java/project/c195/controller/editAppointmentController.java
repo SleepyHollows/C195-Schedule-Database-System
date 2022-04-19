@@ -75,9 +75,9 @@ public class editAppointmentController implements Initializable {
         contactDropDown.setItems(contactsDataSQL.getContactsName());
         locationsDropDown.setItems(divisionsDataSQL.getDivisionName());
         typeDropDown.getItems().addAll("Medical", "Walk-in", "Misc");
-        startHourDropDown.getItems().addAll("08", "09", "10", "11", "12", "1", "2", "3", "4");
+        startHourDropDown.getItems().addAll("8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm", "8pm", "9pm");
         startMinDropDown.getItems().addAll("00", "15", "30", "45");
-        endHourDropDown.getItems().addAll("08", "09", "10", "11", "12", "1", "2", "3", "4");
+        endHourDropDown.getItems().addAll("8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm", "8pm", "9pm");
         endMinDropDown.getItems().addAll("00", "15", "30", "45");
     }
 
@@ -94,7 +94,7 @@ public class editAppointmentController implements Initializable {
         ZonedDateTime startDateTimeUTC = selectedAppointment.getStart().toInstant().atZone(ZoneOffset.UTC);
         ZonedDateTime endDateTimeUTC = selectedAppointment.getEnd().toInstant().atZone(ZoneOffset.UTC);
 
-        DateTimeFormatter hourFormat = DateTimeFormatter.ofPattern("HH");
+        DateTimeFormatter hourFormat = DateTimeFormatter.ofPattern("hh am");
         DateTimeFormatter minFormat = DateTimeFormatter.ofPattern("mm");
 
         ZonedDateTime localStartDateTime = startDateTimeUTC.withZoneSameInstant(usersDataSQL.getUserTimeZone());
@@ -117,7 +117,6 @@ public class editAppointmentController implements Initializable {
         startMinDropDown.setValue(localStartMin);
         endHourDropDown.setValue(localEndHour);
         endMinDropDown.setValue(localEndMin);
-
     }
 
     @FXML

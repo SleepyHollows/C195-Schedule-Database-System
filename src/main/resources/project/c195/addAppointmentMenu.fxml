@@ -67,7 +67,7 @@
    <ComboBox fx:id="hourDropDown" layoutX="399.0" layoutY="335.0" prefHeight="26.0" prefWidth="83.0" promptText="Hour" />
    <ComboBox fx:id="minDropDown" layoutX="507.0" layoutY="335.0" prefHeight="26.0" prefWidth="83.0" promptText="Min" />
    <ComboBox fx:id="divisionDropDown" layoutX="399.0" layoutY="230.0" prefWidth="150.0" />
-   <DatePicker fx:id="dateBox" layoutX="232.0" layoutY="335.0" onAction="#getDate" prefHeight="26.0" prefWidth="150.0" promptText="Enter a date" />
+   <DatePicker fx:id="dateBox" layoutX="232.0" layoutY="335.0" prefHeight="26.0" prefWidth="150.0" promptText="Enter a date" />
    <ComboBox fx:id="endHourDropDown" layoutX="229.0" layoutY="373.0" prefHeight="26.0" prefWidth="83.0" promptText="Hour" />
    <ComboBox fx:id="endMinDropDown" layoutX="337.0" layoutY="373.0" prefHeight="26.0" prefWidth="83.0" promptText="Min" />
 </AnchorPane>

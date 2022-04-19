@@ -4,9 +4,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import project.c195.model.appointmentData;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public class appointmentDataSQL {
@@ -47,10 +50,15 @@ public class appointmentDataSQL {
             String location,
             String type,
             String start,
-            String end
+            String end,
+            ZonedDateTime createDate,
+            String createdBy,
+            ZonedDateTime lastUpdated,
+            String lastUpdatedBy
     ) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
-            String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID, Create_Date, Created_By, Last_Update, Last_Updated_By) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ps.setInt(1, appointmentID);
             ps.setString(2, title);
@@ -62,6 +70,10 @@ public class appointmentDataSQL {
             ps.setInt(8, customerID);
             ps.setInt(9, userID);
             ps.setInt(10, contactID);
+            ps.setString(11, ZonedDateTime.now(ZoneOffset.UTC).format(formatter).toString());
+            ps.setString(12, createdBy);
+            ps.setString(13, ZonedDateTime.now(ZoneOffset.UTC).format(formatter).toString());
+            ps.setString(14, lastUpdatedBy);
             ps.execute();
         }
         catch (SQLException e) {
@@ -163,5 +175,25 @@ public class appointmentDataSQL {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public static boolean checkForOverLapAppointments(LocalDateTime selectedStartTime, LocalDateTime selectedEndTime, LocalDate selectedDate) {
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Start, END FROM appointments WHERE " +
+                    "'" + selectedStartTime + "' <= End AND '" + selectedEndTime + "' >= Start OR " +
+                    "'" + selectedStartTime + "' <= End AND '" + selectedStartTime + "' >= Start OR " +
+                    "'" + selectedEndTime + "' <= End AND '" + selectedEndTime + "' >= Start");
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                if(!rs.next()) {
+                    return false;
+                }
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 }
