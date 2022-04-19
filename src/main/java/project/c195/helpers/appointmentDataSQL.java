@@ -51,9 +51,7 @@ public class appointmentDataSQL {
             String type,
             String start,
             String end,
-            ZonedDateTime createDate,
             String createdBy,
-            ZonedDateTime lastUpdated,
             String lastUpdatedBy
     ) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

@@ -8,19 +8,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class countriesDataSQL {
-    public static ObservableList getCountryID() {
-        ObservableList list = FXCollections.observableArrayList();
+    public static int getCountryIDByName(String countryName) {
+        int countryID = 0;
         try {
-            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Country_ID FROM countries");
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Country_ID FROM countries WHERE Country = '" + countryName + "'");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                list.add(rs.getInt("Country_ID"));
-            }
+                    countryID = rs.getInt("Country_ID");
+                    return countryID;
+                }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return list;
+        return countryID;
     }
 
     public static ObservableList getCountryName() {
@@ -38,15 +39,4 @@ public class countriesDataSQL {
         return list;
     }
 
-    public static String getCountryNameByDivID(String divID) {
-        String countryName = "";
-        try {
-            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Country FROM countries WHERE Div");
-            ResultSet rs = ps.executeQuery();
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-        return countryName;
-    }
 }

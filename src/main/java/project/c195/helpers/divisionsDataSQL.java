@@ -73,4 +73,19 @@ public class divisionsDataSQL {
         }
         return divisionName;
     }
+
+    public static ObservableList getDivisionNameByCountryID(int countryID) {
+        ObservableList list = FXCollections.observableArrayList();
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Division FROM first_level_divisions WHERE Country_ID = '" + countryID + "'");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                list.add(rs.getString("Division"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

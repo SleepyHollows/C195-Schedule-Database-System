@@ -23,6 +23,9 @@ import java.util.ResourceBundle;
 public class overviewMenuController implements Initializable {
 
     @FXML
+    private Button addAppointmentBtn;
+
+    @FXML
     private ToggleGroup radioButton;
 
     @FXML
@@ -146,8 +149,16 @@ public class overviewMenuController implements Initializable {
     }
 
 
-    public void openAddAppointmentMenu(ActionEvent event) throws IOException {
-        sceneController.switchScreen(event, "/project/c195/addAppointmentMenu.fxml");
+    public void openAddAppointmentMenu() throws IOException {
+        customerData selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
+        Stage stage = (Stage) addAppointmentBtn.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/c195/addAppointmentMenu.fxml"));
+        Parent root = loader.load();
+        addAppointmentController controller = loader.getController();
+        controller.setCustomerID(selectedCustomer);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void openEditAppointmentMenu() throws IOException {

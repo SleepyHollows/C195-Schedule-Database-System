@@ -64,6 +64,7 @@ public class editCustomerController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         stateDropDown.setItems(divisionsDataSQL.getDivisionName());
     }
+
     public void setData(customerData selectedCustomer) {
         customerIDBox.setText(String.valueOf(selectedCustomer.getId()));
         customerNameBox.setText(selectedCustomer.getName());
