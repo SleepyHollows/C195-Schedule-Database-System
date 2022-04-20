@@ -4,8 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import project.c195.helpers.appointmentDataSQL;
@@ -153,6 +152,8 @@ public class reportsMenuController implements Initializable {
     int monthCount;
     int contactCount;
     int pastCount;
+    ButtonType yes = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+    ButtonType no = new ButtonType("No", ButtonBar.ButtonData.NO);
 
     ObservableList<appointmentData> monthList;
     ObservableList<appointmentData> contactList;
@@ -161,7 +162,23 @@ public class reportsMenuController implements Initializable {
 
     @FXML
     public void openOverviewMenu(ActionEvent event) throws IOException {
-        sceneController.switchScreen(event, "overviewMenu.fxml");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Go to Overview Menu");
+        alert.setHeaderText("Are you sure you want to return to the overview menu?");
+        alert.setContentText("Return?");
+        alert.getButtonTypes().setAll(yes, no);
+        alert.showAndWait().ifPresent(type -> {
+            if(type == yes) {
+                try {
+                    sceneController.switchScreen(event, "overviewMenu.fxml");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(type == no) {
+                alert.close();
+            }
+        });
     }
 
     @Override

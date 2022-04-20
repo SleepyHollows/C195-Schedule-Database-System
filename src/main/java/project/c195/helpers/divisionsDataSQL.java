@@ -49,8 +49,6 @@ public class divisionsDataSQL {
                 if (divisionName.equals(rs.getString("Division"))) {
                     divisionID = rs.getInt("Division_ID");
                     return divisionID;
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR, "no division found");
                 }
             }
         } catch (SQLException e) {
@@ -87,5 +85,20 @@ public class divisionsDataSQL {
             e.printStackTrace();
         }
         return list;
+    }
+    public static int getDivisionCountryIDByName(String divisionName) {
+        int countryID = 0;
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Country_ID FROM first_level_divisions WHERE Division = '" + divisionName + "'");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                    countryID = rs.getInt("Country_ID");
+                    return countryID;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return countryID;
     }
 }

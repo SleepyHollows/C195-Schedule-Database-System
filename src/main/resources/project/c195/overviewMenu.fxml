@@ -75,4 +75,5 @@
     <TextField fx:id="searchTextField" layoutX="590.0" layoutY="287.0" onAction="#searchAppointments" prefHeight="26.0" prefWidth="163.0" promptText="Search for an Appointment" />
     <Button fx:id="searchBtn" layoutX="753.0" layoutY="287.0" mnemonicParsing="false" onAction="#searchAppointments" prefHeight="26.0" prefWidth="52.0" text="Search" />
    <Button layoutX="21.0" layoutY="482.0" mnemonicParsing="false" onAction="#openReportsMenu" prefHeight="26.0" prefWidth="130.0" text="Open Reports" />
+   <Button fx:id="logoutBtn" layoutX="710.0" layoutY="11.0" mnemonicParsing="false" onAction="#openLoginMenu" prefHeight="26.0" prefWidth="130.0" text="Logout" />
 </AnchorPane>

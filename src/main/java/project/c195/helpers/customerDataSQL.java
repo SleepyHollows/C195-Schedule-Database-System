@@ -7,6 +7,9 @@ import project.c195.model.customerData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public class customerDataSQL {
@@ -37,15 +40,17 @@ public class customerDataSQL {
 
     public static void customerInsertSQL (
             int customerID,
-            int divisionID,
             String name,
             String address,
+            String postal,
             String phone,
-            String postal
-
+            int divisionID,
+            String createdBy,
+            String lastUpdatedBy
     ) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
-            String sql = "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Division_ID) VALUES(?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone,  Division_ID, Create_Date, Created_By, Last_Update, Last_Updated_By) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ps.setInt(1, customerID);
             ps.setString(2, name);
@@ -53,6 +58,10 @@ public class customerDataSQL {
             ps.setString(4, postal);
             ps.setString(5, phone);
             ps.setInt(6, divisionID);
+            ps.setString(7, ZonedDateTime.now(ZoneOffset.UTC).format(formatter).toString());
+            ps.setString(8, createdBy);
+            ps.setString(9, ZonedDateTime.now(ZoneOffset.UTC).format(formatter).toString());
+            ps.setString(10, lastUpdatedBy);
             ps.execute();
         }
         catch (SQLException e) {
@@ -89,43 +98,36 @@ public class customerDataSQL {
     }
 
     public static void updateCustomerSQL(
+            int customerID,
             String name,
             String address,
             String postal,
             String phone,
             int divisionID,
-            int customerID
+            String lastUpdatedBy
     ) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
             PreparedStatement ps = JDBC.connection.prepareStatement("UPDATE customers SET " +
-                    "Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? " +
+                    "Customer_Name = ?, " +
+                    "Address = ?, " +
+                    "Postal_Code = ?, " +
+                    "Phone = ?, " +
+                    "Division_ID = ?, " +
+                    "Last_Update = ?, " +
+                    "Last_Updated_By = ? " +
                     "WHERE Customer_ID = '" + customerID + "'");
             ps.setString(1, name);
             ps.setString(2, address);
             ps.setString(3, postal);
             ps.setString(4, phone);
             ps.setInt(5, divisionID);
+            ps.setString(6, ZonedDateTime.now(ZoneOffset.UTC).format(formatter).toString());
+            ps.setString(7, lastUpdatedBy);
             ps.executeUpdate();
         }
         catch(Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static boolean verifyCustomerID(int customerID) {
-        try {
-            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Customer_ID FROM customers WHERE Customer_ID = '" + customerID + "'");
-            ResultSet rs = ps.executeQuery();
-
-            while(rs.next()) {
-                if(!rs.next()) {
-                    return false;
-                }
-            }
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-        return true;
     }
 }

@@ -20,8 +20,8 @@
             <Font size="15.0" />
         </font>
     </Text>
-    <TextField fx:id="customerIDBox" layoutX="232.0" layoutY="104.0" />
-    <TextField fx:id="userIDBox" layoutX="232.0" layoutY="133.0" />
+    <TextField fx:id="customerIDBox" disable="true" editable="false" layoutX="232.0" layoutY="104.0" />
+    <TextField fx:id="userIDBox" disable="true" editable="false" layoutX="232.0" layoutY="133.0" />
     <TextField fx:id="titleBox" layoutX="232.0" layoutY="164.0" />
     <TextField fx:id="descriptionBox" layoutX="232.0" layoutY="194.0" />
     <Text layoutX="139.0" layoutY="356.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Time">
@@ -61,7 +61,7 @@
             <Font size="27.0" />
         </font>
     </Text>
-   <ComboBox fx:id="locationDropDown" layoutX="232.0" layoutY="230.0" prefWidth="150.0" />
+   <ComboBox fx:id="locationDropDown" layoutX="232.0" layoutY="230.0" onAction="#setDivisions" prefWidth="150.0" />
    <ComboBox fx:id="contactDropDown" layoutX="231.0" layoutY="262.0" prefWidth="150.0" />
    <ComboBox fx:id="typeDropDown" layoutX="232.0" layoutY="296.0" prefWidth="150.0" />
    <ComboBox fx:id="hourDropDown" layoutX="399.0" layoutY="335.0" prefHeight="26.0" prefWidth="83.0" promptText="Hour" />

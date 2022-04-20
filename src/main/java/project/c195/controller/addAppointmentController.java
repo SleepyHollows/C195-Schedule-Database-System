@@ -62,22 +62,20 @@ public class addAppointmentController implements Initializable {
     Alert alert;
     ButtonType yes = new ButtonType("Yes", ButtonBar.ButtonData.YES);
     ButtonType no = new ButtonType("No", ButtonBar.ButtonData.NO);
-    String start, end, contactName, title, description, location, type, createdBy, lastUpdateBy;
+    String start, end, contactName, title, description, division, type, createdBy, lastUpdateBy;
     int customerID, appointmentID, userID, contactID;
     boolean validOverLap, validBusinessHours;
     LocalDateTime startDateTime, endDateTime;
     LocalDate dateSelected;
-    ZonedDateTime createDate, lastUpdated;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-
 
     /**
     This will set all days that are prior to LocalDate or weekends as disabled, so they can't be picked.
      */
     private Callback<DatePicker, DateCell> getDayCellFactory() {
-        final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+        return new Callback<>() {
             @Override
-            public DateCell call(final DatePicker dateBox) {
+            public DateCell call(final DatePicker dateBox1) {
                 return new DateCell() {
                     @Override
                     public void updateItem(LocalDate item, boolean empty) {
@@ -87,7 +85,7 @@ public class addAppointmentController implements Initializable {
                         // Disable Saturday, Sunday, Dates < Current Date.
                         if (item.getDayOfWeek() == DayOfWeek.SATURDAY //
                                 || item.getDayOfWeek() == DayOfWeek.SUNDAY //
-                        || item.compareTo(today) < 0) {
+                                || item.compareTo(today) < 0) {
                             setDisable(true);
                             setStyle("-fx-background-color: #D3D3D3;");
                         }
@@ -95,7 +93,6 @@ public class addAppointmentController implements Initializable {
                 };
             }
         };
-        return dayCellFactory;
     }
 
     @Override
@@ -119,10 +116,9 @@ public class addAppointmentController implements Initializable {
     }
 
     /**
-     * This Actionevent sets the divisions the corresponding Country divisions.
-     * @param event
+     * This Action-event sets the divisions the corresponding Country divisions.
      */
-    public void setDivisions(ActionEvent event) {
+    public void setDivisions() {
         divisionDropDown.setItems(divisionsDataSQL.getDivisionNameByCountryID(countriesDataSQL.getCountryIDByName(locationDropDown.getSelectionModel().getSelectedItem())));
     }
 
@@ -184,7 +180,7 @@ public class addAppointmentController implements Initializable {
     /**
      * This method is the primary creation method.
      * On pressing "save" all the variables are assigned from the appropriate dropdowns or textboxes
-     * The datepicker and all the hour/min dropdowns are converted to Strings and concatenated together to form  the whole
+     * The date picker and all the hour/min dropdowns are converted to Strings and concatenated together to form  the whole
      * Datetime value required by the database
      * There is a checker for if any empty boxes as well as checking if the selected appointment date/time conflicts
      * with business hours or an already existing appointments. the start and end times are also verified to be in
@@ -200,7 +196,7 @@ public class addAppointmentController implements Initializable {
             contactName = String.valueOf(contactDropDown.getSelectionModel().getSelectedItem());
             title  = titleBox.getText();
             description = descriptionBox.getText();
-            location = String.valueOf(locationDropDown.getSelectionModel().getSelectedItem());
+            division = String.valueOf(divisionDropDown.getSelectionModel().getSelectedItem());
             type = String.valueOf(typeDropDown.getSelectionModel().getSelectedItem());
             createdBy = usersDataSQL.getCurrentUsers().getUsername();
             lastUpdateBy = usersDataSQL.getCurrentUsers().getUsername();
@@ -218,12 +214,10 @@ public class addAppointmentController implements Initializable {
                 Timestamp startTime = Timestamp.valueOf(start);
                 Timestamp endTime = Timestamp.valueOf(end);
                 startDateTime = LocalDateTime.of(dateBox.getValue(),
-                        LocalTime.parse(endHourDropDown.getSelectionModel().getSelectedItem() + ":" + endMinDropDown.getSelectionModel().getSelectedItem(), formatter));
+                        LocalTime.parse(hourDropDown.getSelectionModel().getSelectedItem() + ":" + minDropDown.getSelectionModel().getSelectedItem(), formatter));
                 endDateTime = LocalDateTime.of(dateBox.getValue(),
                         LocalTime.parse(endHourDropDown.getSelectionModel().getSelectedItem() + ":" + endMinDropDown.getSelectionModel().getSelectedItem(), formatter));
-                createDate = ZonedDateTime.of(startDateTime, usersDataSQL.getUserTimeZone());
-                lastUpdated = ZonedDateTime.of(endDateTime, usersDataSQL.getUserTimeZone());
-                validOverLap = appointmentDataSQL.checkForOverLapAppointments(startDateTime, endDateTime, dateSelected);
+                validOverLap = appointmentDataSQL.checkForOverLapAppointments(startDateTime, endDateTime);
                 validBusinessHours = validateBusinessHours(startDateTime, endDateTime, dateSelected);
 
                 if(!endTime.after(startTime)) {
@@ -240,7 +234,7 @@ public class addAppointmentController implements Initializable {
                         alert.showAndWait().ifPresent(button -> {
                             if(button == yes) {
                                 try {
-                                    appointmentDataSQL.appointmentInsertSQL(customerID, appointmentID, userID, contactID, title, description, location, type, start, end, createdBy, lastUpdateBy);
+                                    appointmentDataSQL.appointmentInsertSQL(customerID, appointmentID, userID, contactID, title, description, division, type, start, end, createdBy, lastUpdateBy);
                                     sceneController.switchScreen(event, "overviewMenu.fxml");
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -250,7 +244,8 @@ public class addAppointmentController implements Initializable {
                                 alert.close();
                             }
                         });
-                    } else {
+                    }
+                    else {
                         alert = new Alert(Alert.AlertType.ERROR, "Appointment either overlaps with another or the set time is out of business hours");
                         alert.showAndWait();
                     }

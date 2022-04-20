@@ -1,6 +1,5 @@
 package project.c195.controller;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -71,6 +70,9 @@ public class overviewMenuController implements Initializable {
     private Button searchBtn;
 
     @FXML
+    private Button logoutBtn;
+
+    @FXML
     private TableView<appointmentData> appointmentTable;
 
     @FXML
@@ -105,6 +107,9 @@ public class overviewMenuController implements Initializable {
 
     ObservableList<customerData> customerList;
     ObservableList<appointmentData> appointmentList;
+    Alert alert;
+    ButtonType yes = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+    ButtonType no = new ButtonType("No", ButtonBar.ButtonData.NO);
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -138,56 +143,119 @@ public class overviewMenuController implements Initializable {
 
     public void openEditCustomerMenu() throws IOException {
         customerData selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
-        Stage stage = (Stage) updateCustomerBtn.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/c195/editCustomerMenu.fxml"));
-        Parent root = loader.load();
-        editCustomerController controller = loader.getController();
-        controller.setData(selectedCustomer);
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        if(selectedCustomer == null){
+            alert = new Alert(Alert.AlertType.ERROR, "No customer was selected, please selected a customer and try again");
+            alert.showAndWait();
+        }
+        else {
+            Stage stage = (Stage) updateCustomerBtn.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/c195/editCustomerMenu.fxml"));
+            Parent root = loader.load();
+            editCustomerController controller = loader.getController();
+            controller.setData(selectedCustomer);
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }
     }
-
 
     public void openAddAppointmentMenu() throws IOException {
         customerData selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
-        Stage stage = (Stage) addAppointmentBtn.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/c195/addAppointmentMenu.fxml"));
-        Parent root = loader.load();
-        addAppointmentController controller = loader.getController();
-        controller.setCustomerID(selectedCustomer);
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        if(selectedCustomer == null){
+            alert = new Alert(Alert.AlertType.ERROR, "No customer was selected, please selected a customer and try again");
+            alert.showAndWait();
+        }
+        else {
+            Stage stage = (Stage) addAppointmentBtn.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/c195/addAppointmentMenu.fxml"));
+            Parent root = loader.load();
+            addAppointmentController controller = loader.getController();
+            controller.setCustomerID(selectedCustomer);
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }
+
     }
 
     public void openEditAppointmentMenu() throws IOException {
         appointmentData selectedAppointment  = appointmentTable.getSelectionModel().getSelectedItem();
-        Stage stage = (Stage) updateAppointmentBtn.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/c195/editAppointmentMenu.fxml"));
-        Parent root = loader.load();
-        editAppointmentController controller = loader.getController();
-        controller.setData(selectedAppointment);
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        if(selectedAppointment == null){
+            alert = new Alert(Alert.AlertType.ERROR, "No appointment was selected, please selected an appointment and try again");
+            alert.showAndWait();
+        }
+        else {
+            Stage stage = (Stage) updateAppointmentBtn.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/c195/editAppointmentMenu.fxml"));
+            Parent root = loader.load();
+            editAppointmentController controller = loader.getController();
+            controller.setData(selectedAppointment);
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }
+
     }
 
     public void openReportsMenu(ActionEvent event) throws IOException {
         sceneController.switchScreen(event, "/project/c195/reportsMenu.fxml");
     }
 
-    public void deleteAppointment(ActionEvent event) throws IOException {
+    public void deleteAppointment(ActionEvent event) {
         appointmentData selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
-        appointmentDataSQL.appointmentDeleteSQL(selectedAppointment.getAppointmentID());
-        sceneController.switchScreen(event, "overviewMenu.fxml");
+        if(selectedAppointment == null) {
+            alert = new Alert(Alert.AlertType.ERROR, "No appointment was selected, please selected an appointment and try again");
+            alert.showAndWait();
+        }
+        else {
+            alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete appointment");
+            alert.setHeaderText("Are you sure you want to delete this appointment, all data will be lost?");
+            alert.setContentText("Delete?");
+            alert.getButtonTypes().setAll(yes, no);
+            alert.showAndWait().ifPresent(button -> {
+                if (button == yes) {
+                    try {
+                        appointmentDataSQL.appointmentDeleteSQL(selectedAppointment.getAppointmentID());
+                        sceneController.switchScreen(event, "overviewMenu.fxml");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else if (button == no) {
+                    alert.close();
+                }
+            });
+        }
+
     }
 
-    public void deleteCustomer(ActionEvent event) throws IOException {
+    public void deleteCustomer(ActionEvent event) {
         customerData selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
-        appointmentDataSQL.customerAppointmentDeleteSQL(selectedCustomer.getId());
-        customerDataSQL.customerDeleteSQL(selectedCustomer.getId());
-        sceneController.switchScreen(event, "overviewMenu.fxml");
+        if(selectedCustomer == null) {
+            alert = new Alert(Alert.AlertType.ERROR, "No customer was selected, please selected a customer and try again");
+            alert.showAndWait();
+        }
+        else {
+            alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete customer");
+            alert.setHeaderText("Are you sure you want to delete this customer, all data will be lost including appointments?");
+            alert.setContentText("Delete?");
+            alert.getButtonTypes().setAll(yes, no);
+            alert.showAndWait().ifPresent(button -> {
+                if (button == yes) {
+                    try {
+                        appointmentDataSQL.customerAppointmentDeleteSQL(selectedCustomer.getId());
+                        customerDataSQL.customerDeleteSQL(selectedCustomer.getId());
+                        sceneController.switchScreen(event, "overviewMenu.fxml");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else if (button == no) {
+                    alert.close();
+                }
+            });
+        }
+
     }
 
     public void searchAppointments() {
@@ -201,6 +269,27 @@ public class overviewMenuController implements Initializable {
             searchTextField.setText("");
         }
     }
+
+    public void openLoginMenu(ActionEvent event) {
+        alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Logout of account");
+        alert.setHeaderText("Are you sure you want to logout?");
+        alert.setContentText("Logout?");
+        alert.getButtonTypes().setAll(yes, no);
+        alert.showAndWait().ifPresent(type -> {
+            if(type == yes) {
+                try {
+                    sceneController.switchScreen(event, "loginMenu.fxml");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(type == no) {
+                alert.close();
+            }
+        });
+    }
+
     public void radioButtons() {
         if (viewCustomerRadioBtn.isSelected()) {
 

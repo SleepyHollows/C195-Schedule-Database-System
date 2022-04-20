@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import project.c195.model.appointmentData;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -56,7 +55,22 @@ public class appointmentDataSQL {
     ) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
-            String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID, Create_Date, Created_By, Last_Update, Last_Updated_By) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO appointments (" +
+                    "Appointment_ID, " +
+                    "Title, " +
+                    "Description, " +
+                    "Location, " +
+                    "Type, " +
+                    "Start, " +
+                    "End, " +
+                    "Customer_ID, " +
+                    "User_ID, " +
+                    "Contact_ID, " +
+                    "Create_Date, " +
+                    "Created_By, " +
+                    "Last_Update, " +
+                    "Last_Updated_By) " +
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ps.setInt(1, appointmentID);
             ps.setString(2, title);
@@ -118,6 +132,7 @@ public class appointmentDataSQL {
     }
 
     public static void updateAppointmentSQL(
+            int appointmentID,
             String title,
             String description,
             String location,
@@ -125,12 +140,21 @@ public class appointmentDataSQL {
             String start,
             String end,
             int contactID,
-            int appointmentID
+            String lastUpdatedBy
     ) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
             PreparedStatement ps = JDBC.connection.prepareStatement("UPDATE appointments SET " +
-                    "Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
-                            "Contact_ID = ? WHERE Appointment_ID = '" + appointmentID + "'");
+                    "Title = ?, " +
+                    "Description = ?, " +
+                    "Location = ?, " +
+                    "Type = ?, " +
+                    "Start = ?, " +
+                    "End = ?, " +
+                    "Contact_ID = ?, " +
+                    "Last_Update = ?, " +
+                    "Last_Updated_By = ? " +
+                    "WHERE Appointment_ID = ?");
             ps.setString(1, title);
             ps.setString(2, description);
             ps.setString(3, location);
@@ -138,6 +162,9 @@ public class appointmentDataSQL {
             ps.setString(5, start);
             ps.setString(6, end);
             ps.setInt(7, contactID);
+            ps.setString(8, ZonedDateTime.now(ZoneOffset.UTC).format(formatter).toString());
+            ps.setString(9, lastUpdatedBy);
+            ps.setInt(10, appointmentID);
             ps.executeUpdate();
         }
         catch(Exception e) {
@@ -175,7 +202,7 @@ public class appointmentDataSQL {
         return list;
     }
 
-    public static boolean checkForOverLapAppointments(LocalDateTime selectedStartTime, LocalDateTime selectedEndTime, LocalDate selectedDate) {
+    public static boolean checkForOverLapAppointments(LocalDateTime selectedStartTime, LocalDateTime selectedEndTime) {
         try {
             PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Start, END FROM appointments WHERE " +
                     "'" + selectedStartTime + "' <= End AND '" + selectedEndTime + "' >= Start OR " +

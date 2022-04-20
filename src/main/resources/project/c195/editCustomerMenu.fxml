@@ -5,10 +5,10 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="478.0" prefWidth="481.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.c195.controller.editCustomerController">
-    <TextField fx:id="customerNameBox" layoutX="212.0" layoutY="142.0" />
-    <TextField fx:id="addressBox" layoutX="212.0" layoutY="189.0" />
-    <TextField fx:id="postalBox" layoutX="212.0" layoutY="321.0" />
-    <TextField fx:id="phoneBox" layoutX="212.0" layoutY="368.0" />
+    <TextField fx:id="nameTextBox" layoutX="212.0" layoutY="142.0" />
+    <TextField fx:id="addressTextBox" layoutX="212.0" layoutY="189.0" />
+    <TextField fx:id="postalTextBox" layoutX="212.0" layoutY="321.0" />
+    <TextField fx:id="phoneTextBox" layoutX="212.0" layoutY="368.0" />
     <Button layoutX="212.0" layoutY="409.0" mnemonicParsing="false" onAction="#updateCustomer" prefHeight="26.0" prefWidth="70.0" text="Save" />
     <Button layoutX="291.0" layoutY="409.0" mnemonicParsing="false" onAction="#openOverviewMenu" prefHeight="26.0" prefWidth="70.0" text="Cancel" />
     <Text layoutX="147.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
@@ -42,10 +42,16 @@
         </font>
     </Text>
    <ComboBox fx:id="stateDropDown" layoutX="212.0" layoutY="279.0" prefWidth="150.0" />
-   <TextField fx:id="customerIDBox" editable="false" layoutX="212.0" layoutY="103.0" />
+   <TextField fx:id="idTextBox" disable="true" editable="false" layoutX="212.0" layoutY="103.0" />
    <Text layoutX="100.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CustomerID">
       <font>
          <Font size="18.0" />
       </font>
    </Text>
+   <Text layoutX="131.0" layoutY="259.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Country">
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Text>
+   <ComboBox fx:id="countryDropDown" layoutX="212.0" layoutY="239.0" onAction="#setDivisions" prefWidth="150.0" />
 </AnchorPane>

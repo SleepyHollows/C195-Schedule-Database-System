@@ -39,4 +39,19 @@ public class countriesDataSQL {
         return list;
     }
 
+    public static String getCountryNameByID(int countryID) {
+        String countryName = "";
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Country FROM countries WHERE Country_ID = '" + countryID + "'");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                countryName = rs.getString("Country");
+                return countryName;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return countryName;
+    }
 }
