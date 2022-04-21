@@ -23,6 +23,9 @@ public class loginMenuController implements Initializable {
     private TextField usernameTextField;
 
     @FXML
+    private Text locationText;
+
+    @FXML
     private Text usernameTitle;
 
     @FXML
@@ -50,6 +53,7 @@ public class loginMenuController implements Initializable {
         currentLocationDisplay.setText(ZoneId.systemDefault().toString());
         try {
             if(Locale.getDefault().getLanguage().equals("es")) {
+                locationText.setText(rb.getString("Location"));
                 usernameTitle.setText(rb.getString("Username"));
                 passwordTitle.setText(rb.getString("Password"));
                 loginTitle.setText(rb.getString("loginTitle"));
@@ -77,16 +81,16 @@ public class loginMenuController implements Initializable {
                 ObservableList<appointmentData> upcomingAppointments = appointmentDataSQL.getAppointmentsIn15Min();
                 if(!upcomingAppointments.isEmpty()) {
                     for (appointmentData upcoming : upcomingAppointments) {
-                        String message = "Upcoming appointment ID: " + upcoming.getAppointmentID() + " Starts at: " +
-                                upcoming.getStart().toString();
+                        String message = rb.getString("Upcoming") + upcoming.getAppointmentID() +
+                                rb.getString("Starts") + upcoming.getStart().toString();
                         ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
                         Alert alert = new Alert(Alert.AlertType.WARNING, message, clickOkay);
                         alert.showAndWait();
                     }
                 }
                 else {
-                    ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
-                    Alert invalidInput = new Alert(Alert.AlertType.CONFIRMATION, "No Appointments in the next 15 minutes", clickOkay);
+                    ButtonType clickOkay = new ButtonType(rb.getString("Okay"), ButtonBar.ButtonData.OK_DONE);
+                    Alert invalidInput = new Alert(Alert.AlertType.CONFIRMATION, rb.getString("Nope"), clickOkay);
                     invalidInput.showAndWait();
                 }
                 sceneController.switchScreen(event, "overviewMenu.fxml");
