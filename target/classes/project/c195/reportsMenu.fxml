@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="749.0" prefWidth="901.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.c195.controller.reportsMenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="749.0" prefWidth="901.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.c195.controller.reportsMenuController">
    <TableView fx:id="appointmentByCustomerTable" layoutX="22.0" layoutY="41.0" prefHeight="140.0" prefWidth="856.0">
       <columns>
          <TableColumn fx:id="appIDColCustomer" prefWidth="51.999996185302734" text="App ID" />
@@ -87,4 +92,12 @@
    <ComboBox fx:id="monthDropDown" layoutX="609.0" layoutY="191.0" onAction="#filterMonthTable" prefWidth="150.0" promptText="Select Month" />
    <ComboBox fx:id="contactDropDown" layoutX="609.0" layoutY="374.0" onAction="#filterContactTable" prefWidth="150.0" promptText="Select Contact" />
    <ComboBox fx:id="typeDropDown" layoutX="609.0" layoutY="547.0" onAction="#filterTypeTable" prefWidth="150.0" promptText="Select Type" />
+   <Label layoutX="770.0" layoutY="20.0" text="Count:" />
+   <Label fx:id="customerCount" layoutX="811.0" layoutY="20.0" text="         " />
+   <Label layoutX="772.0" layoutY="200.0" text="Count:" />
+   <Label fx:id="monthCount" layoutX="813.0" layoutY="200.0" text="         " />
+   <Label layoutX="769.0" layoutY="380.0" text="Count:" />
+   <Label fx:id="contactCount" layoutX="810.0" layoutY="380.0" text="         " />
+   <Label layoutX="769.0" layoutY="554.0" text="Count:" />
+   <Label fx:id="typeCount" layoutX="810.0" layoutY="554.0" text="         " />
 </AnchorPane>

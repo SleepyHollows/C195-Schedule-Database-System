@@ -6,7 +6,7 @@
     </list>
   </component>
   <component name="JavadocGenerationManager">
-    <option name="OUTPUT_DIRECTORY" value="$USER_HOME$/Desktop/JavaDocs" />
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/JavaDocs" />
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">

@@ -1,5 +1,6 @@
 package project.c195.controller;
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +17,18 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class reportsMenuController implements Initializable {
+
+    @FXML
+    private Label monthCount;
+
+    @FXML
+    private Label typeCount;
+
+    @FXML
+    private Label contactCount;
+
+    @FXML
+    private Label customerCount;
 
     @FXML
     private TableColumn<appointmentData, Integer> appIDColContact;
@@ -151,7 +164,7 @@ public class reportsMenuController implements Initializable {
 
     //All variables and objects used in this class
     String selectedMonth, type;
-    int customerID, contactID;
+    int customerID, contactID, totalCustomer, totalMonth, totalType, totalContact;
     ButtonType yes = new ButtonType("Yes", ButtonBar.ButtonData.YES);
     ButtonType no = new ButtonType("No", ButtonBar.ButtonData.NO);
     ObservableList<appointmentData> monthList;
@@ -247,6 +260,14 @@ public class reportsMenuController implements Initializable {
                 "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER");
         contactDropDown.setItems(contactsDataSQL.getContactsName());
         typeDropDown.getItems().addAll("Medical", "Walk-in", "Misc");
+        totalCustomer = customerList.size();
+        customerCount.setText(String.valueOf(totalCustomer));
+        totalType = typeList.size();
+        typeCount.setText(String.valueOf(totalType));
+        totalMonth = monthList.size();
+        monthCount.setText(String.valueOf(totalMonth));
+        totalContact = contactList.size();
+        contactCount.setText(String.valueOf(totalContact));
     }
 
     /**
@@ -258,6 +279,8 @@ public class reportsMenuController implements Initializable {
         customerID = customerDataSQL.getCustomerIDByName(customerIDDropDown.getSelectionModel().getSelectedItem());
         customerList = appointmentDataSQL.getCustomerFilteredAppointments(customerID);
         appointmentByCustomerTable.setItems(customerList);
+        totalCustomer = customerList.size();
+        customerCount.setText(String.valueOf(totalCustomer));
     }
 
     /**
@@ -269,6 +292,8 @@ public class reportsMenuController implements Initializable {
         selectedMonth = monthDropDown.getSelectionModel().getSelectedItem();
         monthList = appointmentDataSQL.getMonthFilteredAppointments(selectedMonth);
         appointmentByMonthTable.setItems(monthList);
+        totalMonth = monthList.size();
+        monthCount.setText(String.valueOf(totalMonth));
     }
 
     /**
@@ -280,6 +305,9 @@ public class reportsMenuController implements Initializable {
         contactID = contactsDataSQL.getContactsIDByName(contactDropDown.getSelectionModel().getSelectedItem());
         contactList = appointmentDataSQL.getContactFilteredAppointments(contactID);
         appointmentByContactTable.setItems(contactList);
+        totalContact = contactList.size();
+        contactCount.setText(String.valueOf(totalContact));
+
     }
 
     /**
@@ -291,6 +319,8 @@ public class reportsMenuController implements Initializable {
         type = typeDropDown.getSelectionModel().getSelectedItem();
         typeList = appointmentDataSQL.getTypeFilteredAppointments(type);
         appointmentByTypeTable.setItems(typeList);
+        totalType = typeList.size();
+        typeCount.setText(String.valueOf(totalType));
     }
 }
 
