@@ -2,6 +2,7 @@ module project.c195 {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires mysql.connector.java;
 
 
     opens project.c195 to javafx.fxml;

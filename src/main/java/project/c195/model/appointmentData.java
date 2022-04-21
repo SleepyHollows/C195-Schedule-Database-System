@@ -3,6 +3,23 @@ package project.c195.model;
 import java.sql.Timestamp;
 
 public class appointmentData {
+    int appointmentID, contactID, customerID, userID;
+    String title, description, location, type;
+    Timestamp start, end;
+
+    public appointmentData(int customerID, int appointmentID, int contactID, int userID, String title, String description, String location, String type, Timestamp start, Timestamp end) {
+        this.customerID = customerID;
+        this.appointmentID = appointmentID;
+        this.userID = userID;
+        this.contactID = contactID;
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        this.type = type;
+        this.start = start;
+        this.end = end;
+    }
+
     public int getCustomerID() {
         return customerID;
     }
@@ -81,25 +98,5 @@ public class appointmentData {
 
     public void setUserID(int userID) {
         this.userID = userID;
-    }
-
-    int appointmentID;
-    int contactID;
-    int customerID;
-    int userID;
-    String title, description, location, type;
-    Timestamp start, end;
-
-    public appointmentData(int customerID, int appointmentID, int contactID, int userID, String title, String description, String location, String type, Timestamp start, Timestamp end) {
-        this.customerID = customerID;
-        this.appointmentID = appointmentID;
-        this.userID = userID;
-        this.contactID = contactID;
-        this.title = title;
-        this.description = description;
-        this.location = location;
-        this.type = type;
-        this.start = start;
-        this.end = end;
     }
 }

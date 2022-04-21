@@ -22,6 +22,9 @@ import java.util.ResourceBundle;
 public class overviewMenuController implements Initializable {
 
     @FXML
+    private ComboBox<String> miscDropDown;
+
+    @FXML
     private Button addAppointmentBtn;
 
     @FXML
@@ -56,9 +59,6 @@ public class overviewMenuController implements Initializable {
 
     @FXML
     private RadioButton viewAllRadioBtn;
-
-    @FXML
-    private RadioButton viewCustomerRadioBtn;
 
     @FXML
     private RadioButton viewWeekRadioBtn;
@@ -105,12 +105,17 @@ public class overviewMenuController implements Initializable {
     @FXML
     private Button updateAppointmentBtn;
 
+    //All the used variables and objects in the class
     ObservableList<customerData> customerList;
     ObservableList<appointmentData> appointmentList;
     Alert alert;
     ButtonType yes = new ButtonType("Yes", ButtonBar.ButtonData.YES);
     ButtonType no = new ButtonType("No", ButtonBar.ButtonData.NO);
+    String selectedMonth;
 
+    /**
+     * Fills both tables on the overviewMenu with the list of customers and appointments in the database
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -137,10 +142,23 @@ public class overviewMenuController implements Initializable {
         appointmentTable.setItems(appointmentList);
     }
 
+    /**
+     * Allows the user to open addCustomerMenu to add a new customer
+     * @param event opens addCustomerMenu
+     * @throws IOException catches the exceptions thrown by the scene controller
+     */
     public void openAddCustomerMenu(ActionEvent event) throws IOException {
         sceneController.switchScreen(event, "/project/c195/addCustomerMenu.fxml");
     }
 
+    /**
+     * Gets the data from the selected customer and assigns it to a new object "selectedCustomer" of the customerData
+     * class. If selectedCustomer is null (no customer was selected) then it will throw an alert to the user to let them
+     * know.
+     * It sends the selectedCustomer data over to the new scenes' controller class where the data is plug into the method
+     * "setData" which fills in the boxes on that screen with selectedCustomer's data.
+     * @throws IOException catches the exceptions thrown by the scene controller
+     */
     public void openEditCustomerMenu() throws IOException {
         customerData selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
         if(selectedCustomer == null){
@@ -159,6 +177,14 @@ public class overviewMenuController implements Initializable {
         }
     }
 
+    /**
+     * Gets the data from the selected customer and assigns it to a new object "selectedCustomer" of the customerData
+     * class. If selectedCustomer is null (no customer was selected) then it will throw an alert to the user to let them
+     * know.
+     * It sends the selectedCustomer data over to the new scenes' controller class where the data is plug into the method
+     * "setData" which fills in the boxes on that screen with selectedCustomer's data.
+     * @throws IOException catches the exceptions thrown by the scene controller
+     */
     public void openAddAppointmentMenu() throws IOException {
         customerData selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
         if(selectedCustomer == null){
@@ -178,6 +204,14 @@ public class overviewMenuController implements Initializable {
 
     }
 
+    /**
+     * Gets the data from the selected appointment and assigns it to a new object "selectedAppointment" of the
+     * appointmentData class. If selectedCustomer is null (no customer was selected) then it will throw an alert to the
+     * user to let them know.
+     * It sends the selectedAppointment data over to the new scenes' controller class where the data is plug into the
+     * method "setData" which fills in the boxes on that screen with selectedAppointments' data.
+     * @throws IOException catches the exceptions thrown by the scene controller
+     */
     public void openEditAppointmentMenu() throws IOException {
         appointmentData selectedAppointment  = appointmentTable.getSelectionModel().getSelectedItem();
         if(selectedAppointment == null){
@@ -197,10 +231,25 @@ public class overviewMenuController implements Initializable {
 
     }
 
+    /**
+     * Allows the user to open reportsMenu to view multiple reports
+     * @param event opens reportMenu
+     * @throws IOException catches the exceptions thrown by the scene controller
+     */
     public void openReportsMenu(ActionEvent event) throws IOException {
         sceneController.switchScreen(event, "/project/c195/reportsMenu.fxml");
     }
 
+    /**
+     * Gets the data from the selected appointment and assigns it to a new object "selectedAppointment" of the
+     * appointmentData class. If selectedAppointment is null (no customer was selected) then it will throw an alert to
+     * the user to let them know.
+     * An alert confirms with the user that they want to delete the selected appointment before deletion initiates.
+     * selectedAppointments' data is sent to the method "appointmentDeleteSQL" in appointmentDataSQl where it is removed
+     * from the database.
+     * The event then re-opens the overviewMenu to update the overviewMenu and reflects the deletion.
+     * @param event re-opens overviewMenu
+     */
     public void deleteAppointment(ActionEvent event) {
         appointmentData selectedAppointment = appointmentTable.getSelectionModel().getSelectedItem();
         if(selectedAppointment == null) {
@@ -229,6 +278,19 @@ public class overviewMenuController implements Initializable {
 
     }
 
+    /**
+     * Gets the data from the selected customer and assigns it to a new object "selectedCustomer" of the
+     * customerData class. If selectedCustomer is null (no customer was selected) then it will throw an alert to the
+     * user to let them know.
+     * An alert confirms with the user that they want to delete the selected customer before deletion initiates.
+     * The database restricts us to deleting appointments associated with the customer before we can delete the customer
+     * so first the customer ID is sent to "customerAppointmentDeleteSQL" where it will delete any appointments with
+     * the customer ID attached to it.
+     * selectedCustomers' data is sent to the method "customerDeleteSQL" in customerDataSQl where it is removed
+     * from the database.
+     * The event then re-opens the overviewMenu to update the overviewMenu and reflects the deletion.
+     * @param event re-opens overviewMenu
+     */
     public void deleteCustomer(ActionEvent event) {
         customerData selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
         if(selectedCustomer == null) {
@@ -258,6 +320,11 @@ public class overviewMenuController implements Initializable {
 
     }
 
+    /**
+     * This search looks for any matching appointment ID, title, type, or description and updates the appointment list
+     * with the found appointments with matching terms. If the search box is blank then it will just update the
+     * appointment list with all the appointments in the database.
+     */
     public void searchAppointments() {
         if(searchTextField.getText().equals("")) {
             appointmentList = appointmentDataSQL.getAppointmentData();
@@ -270,6 +337,10 @@ public class overviewMenuController implements Initializable {
         }
     }
 
+    /**
+     * Allows the user to log out and return to the loginMenu
+     * @param event opens loginMenu
+     */
     public void openLoginMenu(ActionEvent event) {
         alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Logout of account");
@@ -290,9 +361,54 @@ public class overviewMenuController implements Initializable {
         });
     }
 
-    public void radioButtons() {
-        if (viewCustomerRadioBtn.isSelected()) {
+    /**
+     * Sets all the data in the appointment table to be all appointments in the database
+     * Sets the miscDropDown to false so that it can't be clicked on
+     */
+    public void viewAllRadio() {
+        appointmentList = appointmentDataSQL.getAppointmentData();
+        appointmentTable.setItems(appointmentList);
+        miscDropDown.setVisible(false);
+    }
 
-        }
+    /**
+     * Sets the value in the miscDropDown to "" to reset month selected when switched back to this option
+     * Sets the miscDropDown to visible, so you can view all appointments in each month
+     * fills the miscDropDown with required data to pick months
+     */
+    public void viewMonthRadio() {
+        miscDropDown.setValue("");
+        miscDropDown.setVisible(true);
+        miscDropDown.getItems().addAll("JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
+                "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER");
+    }
+
+    /**
+     * Sets the miscDropDown to false so that it can't be clicked on
+     * Calls the filterByWeek method to update the table
+     */
+    public void viewWeekRadio() {
+        miscDropDown.setVisible(false);
+        filterByWeek();
+    }
+
+    /**
+     * Calls the getMonthFilteredAppointments method where it will build an Observable list that will be used to
+     * populate the appointmentTable
+     */
+    public void filterByMonth() {
+        selectedMonth = miscDropDown.getSelectionModel().getSelectedItem();
+        appointmentList = appointmentDataSQL.getMonthFilteredAppointments(selectedMonth);
+        appointmentTable.setItems(appointmentList);
+    }
+
+    /**
+     * Calls the getWeekFilterAppointments method that and assigns the return Observable list to appointmentList
+     * the table is then updated with the new Observable list.
+     */
+    public void filterByWeek() {
+        miscDropDown.setVisible(false);
+        appointmentList = appointmentDataSQL.getWeekFilterAppointments();
+        appointmentTable.setItems(appointmentList);
     }
 }

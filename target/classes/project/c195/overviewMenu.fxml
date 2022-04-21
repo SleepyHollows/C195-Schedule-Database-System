@@ -43,13 +43,13 @@
             <Font size="16.0" />
         </font>
     </Text>
-    <Button fx:id="addCustomerBtn" layoutX="405.0" layoutY="250.0" mnemonicParsing="false" onAction="#openAddCustomerMenu" prefHeight="26.0" prefWidth="130.0" text="Add Customer" />
+    <Button layoutX="405.0" layoutY="250.0" mnemonicParsing="false" onAction="#openAddCustomerMenu" prefHeight="26.0" prefWidth="130.0" text="Add Customer" />
     <Button fx:id="updateCustomerBtn" layoutX="551.0" layoutY="250.0" mnemonicParsing="false" onAction="#openEditCustomerMenu" prefHeight="26.0" prefWidth="130.0" text="Update Customer" />
-    <Button fx:id="deleteCustomerBtn" layoutX="695.0" layoutY="250.0" mnemonicParsing="false" onAction="#deleteCustomer" prefHeight="26.0" prefWidth="130.0" text="Delete Customer" />
+    <Button layoutX="695.0" layoutY="250.0" mnemonicParsing="false" onAction="#deleteCustomer" prefHeight="26.0" prefWidth="130.0" text="Delete Customer" />
     <Button fx:id="addAppointmentBtn" layoutX="405.0" layoutY="482.0" mnemonicParsing="false" onAction="#openAddAppointmentMenu" prefHeight="26.0" prefWidth="130.0" text="Add Appointment" />
     <Button fx:id="updateAppointmentBtn" layoutX="551.0" layoutY="482.0" mnemonicParsing="false" onAction="#openEditAppointmentMenu" prefHeight="26.0" prefWidth="130.0" text="Update Appointment" />
-    <Button fx:id="deleteAppointmentBtn" layoutX="695.0" layoutY="482.0" mnemonicParsing="false" onAction="#deleteAppointment" prefHeight="26.0" prefWidth="130.0" text="Delete Appointment" />
-    <RadioButton fx:id="viewMonthRadioBtn" layoutX="285.0" layoutY="291.0" mnemonicParsing="false" text="View by Month">
+    <Button layoutX="695.0" layoutY="482.0" mnemonicParsing="false" onAction="#deleteAppointment" prefHeight="26.0" prefWidth="130.0" text="Delete Appointment" />
+    <RadioButton fx:id="viewMonthRadioBtn" layoutX="285.0" layoutY="291.0" mnemonicParsing="false" onAction="#viewMonthRadio" text="View by Month">
         <font>
             <Font size="10.0" />
         </font>
@@ -57,17 +57,12 @@
          <ToggleGroup fx:id="radioButton" />
       </toggleGroup>
     </RadioButton>
-    <RadioButton fx:id="viewAllRadioBtn" layoutX="131.0" layoutY="291.0" mnemonicParsing="false" selected="true" text="View All" toggleGroup="$radioButton">
+    <RadioButton fx:id="viewAllRadioBtn" layoutX="131.0" layoutY="291.0" mnemonicParsing="false" onAction="#viewAllRadio" selected="true" text="View All" toggleGroup="$radioButton">
         <font>
             <Font size="10.0" />
         </font>
     </RadioButton>
-    <RadioButton fx:id="viewCustomerRadioBtn" layoutX="381.0" layoutY="291.0" mnemonicParsing="false" text="View by Customer" toggleGroup="$radioButton">
-        <font>
-            <Font size="10.0" />
-        </font>
-    </RadioButton>
-    <RadioButton fx:id="viewWeekRadioBtn" layoutX="196.0" layoutY="291.0" mnemonicParsing="false" text="View by Week" toggleGroup="$radioButton">
+    <RadioButton fx:id="viewWeekRadioBtn" layoutX="196.0" layoutY="291.0" mnemonicParsing="false" onAction="#viewWeekRadio" text="View by Week" toggleGroup="$radioButton">
         <font>
             <Font size="10.0" />
         </font>
@@ -75,4 +70,6 @@
     <TextField fx:id="searchTextField" layoutX="590.0" layoutY="287.0" onAction="#searchAppointments" prefHeight="26.0" prefWidth="163.0" promptText="Search for an Appointment" />
     <Button fx:id="searchBtn" layoutX="753.0" layoutY="287.0" mnemonicParsing="false" onAction="#searchAppointments" prefHeight="26.0" prefWidth="52.0" text="Search" />
    <Button layoutX="21.0" layoutY="482.0" mnemonicParsing="false" onAction="#openReportsMenu" prefHeight="26.0" prefWidth="130.0" text="Open Reports" />
+   <Button fx:id="logoutBtn" layoutX="710.0" layoutY="11.0" mnemonicParsing="false" onAction="#openLoginMenu" prefHeight="26.0" prefWidth="130.0" text="Logout" />
+   <ComboBox fx:id="miscDropDown" layoutX="385.0" layoutY="285.0" onAction="#filterByMonth" prefWidth="150.0" visible="false" />
 </AnchorPane>

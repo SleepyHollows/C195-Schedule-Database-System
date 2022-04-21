@@ -37,12 +37,16 @@ public class editCustomerController implements Initializable {
     @FXML
     private ComboBox<String> stateDropDown;
 
+    //All objects and variables used in the class
     Alert alert;
     ButtonType yes = new ButtonType("Yes", ButtonBar.ButtonData.YES);
     ButtonType no = new ButtonType("No", ButtonBar.ButtonData.NO);
     String name, address, postal, phone, updatedBy;
     int customerID, divisionID;
 
+    /**
+     * Sets the dropdown menus for state and country with all the data from the database.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -54,10 +58,17 @@ public class editCustomerController implements Initializable {
         }
     }
 
+    /**
+     * This will set the dropdown for states to the appropriate list of states based on country picked
+     */
     public void setDivisions() {
         stateDropDown.setItems(divisionsDataSQL.getDivisionNameByCountryID(countriesDataSQL.getCountryIDByName(countryDropDown.getSelectionModel().getSelectedItem())));
     }
 
+    /**
+     * This confirms with user that they want to return to overviewMenu
+     * @param event opens overviewMenu
+     */
     public void openOverviewMenu(ActionEvent event) {
         alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Cancel customer update");
@@ -78,6 +89,13 @@ public class editCustomerController implements Initializable {
         });
     }
 
+    /**
+     * This assigns the variables with the corresponding values in each textbox/dropdown.
+     * Checks for empty values before inserting in initiated.
+     * Confirms with the user that they want to update the customer
+     * Calls the updateCustomerSQL from the customerDataSQL class.
+     * @param event opens the overviewMenu after the insert is completed
+     */
     public void updateCustomer(ActionEvent event) {
         try {
             name = nameTextBox.getText();
@@ -118,6 +136,10 @@ public class editCustomerController implements Initializable {
         }
     }
 
+    /**
+     * Method used to pull/assign the customer's data to all boxes from the customer list on the overviewMenu
+     * @param selectedCustomer the data pulled from the selected customer on the overviewMenu
+     */
     public void setData(customerData selectedCustomer) {
         idTextBox.setText(String.valueOf(selectedCustomer.getId()));
         nameTextBox.setText(selectedCustomer.getName());

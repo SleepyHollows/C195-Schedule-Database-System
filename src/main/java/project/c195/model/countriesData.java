@@ -4,6 +4,11 @@ public class countriesData {
     int countryID;
     String countryName;
 
+    public countriesData(int countryID, String countryName) {
+        this.countryID = countryID;
+        this.countryName = countryName;
+    }
+
     public int getCountryID() {
         return countryID;
     }
@@ -19,11 +24,4 @@ public class countriesData {
     public void setCountryName(String countryName) {
         this.countryName = countryName;
     }
-
-    public countriesData(int countryID, String countryName) {
-        this.countryID = countryID;
-        this.countryName = countryName;
-    }
-
-
 }

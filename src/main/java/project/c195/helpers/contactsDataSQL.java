@@ -2,32 +2,17 @@ package project.c195.helpers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * Gets a list of only contact names from the database
+ */
 public class contactsDataSQL {
-    public static ObservableList getContactsID() {
-        ObservableList list = FXCollections.observableArrayList();
-        try {
-            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Contact_ID FROM contacts");
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                list.add(rs.getInt("Contact_ID"));
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-    public static ObservableList getContactsName() {
-        ObservableList list = FXCollections.observableArrayList();
+    public static ObservableList<String> getContactsName() {
+        ObservableList <String> list = FXCollections.observableArrayList();
         try {
             PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Contact_Name FROM contacts");
             ResultSet rs = ps.executeQuery();
@@ -42,21 +27,11 @@ public class contactsDataSQL {
         return list;
     }
 
-    public static ObservableList getContactsEmail() {
-        ObservableList list = FXCollections.observableArrayList();
-        try {
-            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Email FROM contacts");
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                list.add(rs.getString("Email"));
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
+    /**
+     * Finds a specific contacts ID using only the name provided
+     * @param contactName the name used to find the Contact ID
+     * @return contact ID from database
+     */
     public static int getContactsIDByName(String contactName) {
         int contactID = 0;
         try {
@@ -67,8 +42,6 @@ public class contactsDataSQL {
                 if (contactName.equals(rs.getString("Contact_Name"))) {
                     contactID = rs.getInt("Contact_ID");
                     return contactID;
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR, "no contact found");
                 }
             }
         } catch (SQLException e) {
@@ -76,6 +49,12 @@ public class contactsDataSQL {
         }
         return contactID;
     }
+
+    /**
+     * Finds a specific contacts name using only the ID provided
+     * @param contactID used to find the contact name
+     * @return contact Name from the database
+     */
     public static String getContactsNameByID(int contactID) {
         String contactName = "";
         try {

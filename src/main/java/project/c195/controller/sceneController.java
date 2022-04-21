@@ -9,6 +9,9 @@ import project.c195.Main;
 
 import java.io.IOException;
 
+/**
+ * Opens the login screen and initiates the whole project
+ */
 public abstract class sceneController {
     public static void switchScreen(ActionEvent event, String location) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(location));

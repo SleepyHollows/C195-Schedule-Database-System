@@ -1,8 +1,8 @@
 package project.c195.model;
 
 public class usersData {
-    private String username;
-    private int userID;
+    private final String username;
+    private final int userID;
 
     public usersData(String username, int userID) {
         this.username = username;

@@ -20,7 +20,7 @@ import static java.lang.Integer.parseInt;
 public class addAppointmentController implements Initializable {
 
     @FXML
-    private ComboBox<Integer> contactDropDown;
+    private ComboBox<String> contactDropDown;
 
     @FXML
     private TextField customerIDBox;
@@ -95,6 +95,9 @@ public class addAppointmentController implements Initializable {
         };
     }
 
+    /**
+     * Sets all date for each combo box dropdown options so that the user can pick them.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -124,7 +127,7 @@ public class addAppointmentController implements Initializable {
 
     /**
      * Method used to pull/assign the customers ID from the customer list on the overviewMenu
-     * @param selectedCustomer
+     * @param selectedCustomer the data pulled from the selected customer on the overviewMenu
      */
     public void setCustomerID(customerData selectedCustomer) {
         customerIDBox.setText(String.valueOf(selectedCustomer.getId()));
@@ -132,7 +135,7 @@ public class addAppointmentController implements Initializable {
 
     /**
      * This prompts the user to confirm that they want to clear all data and return to overViewMenu
-     * @param event
+     * @param event opens the overviewMenu
      */
     public void openOverviewMenu(ActionEvent event) {
         alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -158,10 +161,10 @@ public class addAppointmentController implements Initializable {
      * This is the boolean method used to verify that date/time entered doesn't conflict with any already existing
      * appointments or business hours. if there is any conflict it will return false which triggers an alert in the
      * addAppointment method.
-     * @param startDateTime
-     * @param endDateTime
-     * @param appointmentDate
-     * @return
+     * @param startDateTime zonedDateTime of the start appointment DateTime
+     * @param endDateTime zonedDateTime of the end appointment DateTime
+     * @param appointmentDate ZonedDateTime of the selected appointment date
+     * @return returns false if any conflicts are found
      */
     public Boolean validateBusinessHours(LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDate appointmentDate) {
         // (8am to 10pm EST)
@@ -185,7 +188,7 @@ public class addAppointmentController implements Initializable {
      * There is a checker for if any empty boxes as well as checking if the selected appointment date/time conflicts
      * with business hours or an already existing appointments. the start and end times are also verified to be in
      * the correct order so that start can't come after end and vis a versa.
-     * @param event
+     * @param event switches screen back to overview if insert is error free
      */
     public void addAppointment(ActionEvent event) {
         try {
@@ -208,6 +211,8 @@ public class addAppointmentController implements Initializable {
                 alert.showAndWait();
             }
             else {
+                //All the data needed for setting the appointment datetime for insert and getting the current datetime
+                //of the user
                 dateSelected = dateBox.getValue();
                 start = dateSelected + " " + hourDropDown.getSelectionModel().getSelectedItem() + ":" + minDropDown.getSelectionModel().getSelectedItem() + ":00";
                 end = dateSelected + " " + endHourDropDown.getSelectionModel().getSelectedItem() + ":" + endMinDropDown.getSelectionModel().getSelectedItem() + ":00";
@@ -217,7 +222,7 @@ public class addAppointmentController implements Initializable {
                         LocalTime.parse(hourDropDown.getSelectionModel().getSelectedItem() + ":" + minDropDown.getSelectionModel().getSelectedItem(), formatter));
                 endDateTime = LocalDateTime.of(dateBox.getValue(),
                         LocalTime.parse(endHourDropDown.getSelectionModel().getSelectedItem() + ":" + endMinDropDown.getSelectionModel().getSelectedItem(), formatter));
-                validOverLap = appointmentDataSQL.checkForOverLapAppointments(startDateTime, endDateTime);
+                validOverLap = appointmentDataSQL.checkForOverLapAppointments(startDateTime, endDateTime, appointmentID);
                 validBusinessHours = validateBusinessHours(startDateTime, endDateTime, dateSelected);
 
                 if(!endTime.after(startTime)) {

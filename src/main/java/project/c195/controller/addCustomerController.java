@@ -31,12 +31,16 @@ public class addCustomerController implements Initializable {
     @FXML
     private ComboBox<String> stateDropDown;
 
+    //All objects and variables used in the class
     Alert alert;
     ButtonType yes = new ButtonType("Yes", ButtonBar.ButtonData.YES);
     ButtonType no = new ButtonType("No", ButtonBar.ButtonData.NO);
     String name, address, postal, phone, createdBy;
     int customerID, divisionID;
 
+    /**
+     * Sets the dropdown menus for state and country with all the data from the database.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -48,6 +52,13 @@ public class addCustomerController implements Initializable {
         }
     }
 
+    /**
+     * This assigns the variables with the corresponding values in each textbox/dropdown.
+     * Checks for empty values before inserting in initiated.
+     * Confirms with the user that they want to create the customer
+     * Calls the customerInsertSQL from the customerDataSQL class.
+     * @param event opens the overviewMenu after the insert is completed
+     */
     @FXML
     void addCustomer(ActionEvent event){
         try {
@@ -90,6 +101,10 @@ public class addCustomerController implements Initializable {
         }
     }
 
+    /**
+     * This confirms with user that they want to return to overviewMenu
+     * @param event opens overviewMenu
+     */
     public void openOverviewMenu(ActionEvent event) {
         alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Cancel customer creation");
@@ -110,6 +125,9 @@ public class addCustomerController implements Initializable {
         });
     }
 
+    /**
+     * This will set the dropdown for states to the appropriate list of states based on country picked
+     */
     public void setDivisions() {
         stateDropDown.setItems(divisionsDataSQL.getDivisionNameByCountryID(countriesDataSQL.getCountryIDByName(countryDropDown.getSelectionModel().getSelectedItem())));
     }

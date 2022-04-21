@@ -12,6 +12,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public class appointmentDataSQL {
+
+    /**
+     * Creates an Observable list of all appointments in the database
+     * @return lost of all appointments
+     */
     public static ObservableList<appointmentData> getAppointmentData() {
         ObservableList<appointmentData> list = FXCollections.observableArrayList();
         try {
@@ -39,6 +44,21 @@ public class appointmentDataSQL {
         return list;
     }
 
+    /**
+     * Creates a new appointment in the database using all the provided data from the addAppointmentMenuController
+     * @param customerID customer ID
+     * @param appointmentID appointment ID
+     * @param userID user ID
+     * @param contactID contact ID
+     * @param title appointment title
+     * @param description appointment description
+     * @param location appointment location
+     * @param type appointment type
+     * @param start appointment start time
+     * @param end appointment end time
+     * @param createdBy Who created the appointment
+     * @param lastUpdatedBy who last updated the appointment
+     */
     public static void appointmentInsertSQL (
             int customerID,
             int appointmentID,
@@ -82,9 +102,9 @@ public class appointmentDataSQL {
             ps.setInt(8, customerID);
             ps.setInt(9, userID);
             ps.setInt(10, contactID);
-            ps.setString(11, ZonedDateTime.now(ZoneOffset.UTC).format(formatter).toString());
+            ps.setString(11, ZonedDateTime.now(ZoneOffset.UTC).format(formatter));
             ps.setString(12, createdBy);
-            ps.setString(13, ZonedDateTime.now(ZoneOffset.UTC).format(formatter).toString());
+            ps.setString(13, ZonedDateTime.now(ZoneOffset.UTC).format(formatter));
             ps.setString(14, lastUpdatedBy);
             ps.execute();
         }
@@ -92,6 +112,12 @@ public class appointmentDataSQL {
             e.printStackTrace();
         }
     }
+
+    /**
+     * This allows the appointment ID to be unique. a sudo random number is generated, if it matches any existing ID it
+     * will continue to increment by 1
+     * @return a random number
+     */
     public static int getAppointmentID() {
         Random rnd = new Random();
         int appointmentID = rnd.nextInt(999999);
@@ -111,6 +137,10 @@ public class appointmentDataSQL {
         return appointmentID;
     }
 
+    /**
+     * This deletes a selected appointment from the database using the provided appointment ID
+     * @param selectedAppointment appointment ID from the appointmentData object
+     */
     public static void appointmentDeleteSQL(int selectedAppointment) {
         try {
             PreparedStatement ps = JDBC.connection.prepareStatement("DELETE FROM appointments WHERE Appointment_ID ='" + selectedAppointment + "'");
@@ -121,6 +151,10 @@ public class appointmentDataSQL {
         }
     }
 
+    /**
+     * This deletes all appointments associated with the provided customer ID
+     * @param selectedCustomer the customerData object the customer ID is pulled from
+     */
     public static void customerAppointmentDeleteSQL(int selectedCustomer) {
         try {
             PreparedStatement ps = JDBC.connection.prepareStatement("DELETE FROM appointments WHERE Customer_ID ='" + selectedCustomer + "'");
@@ -131,6 +165,18 @@ public class appointmentDataSQL {
         }
     }
 
+    /**
+     * Update the existing selected appointment using the data provided from editAppointmentController
+     * @param appointmentID appointment ID
+     * @param title appointment title
+     * @param description appointment desciption
+     * @param location appointment location
+     * @param type appointment type
+     * @param start appointment start time
+     * @param end appointment end time
+     * @param contactID customer contact ID
+     * @param lastUpdatedBy who last updated the appointment
+     */
     public static void updateAppointmentSQL(
             int appointmentID,
             String title,
@@ -162,7 +208,7 @@ public class appointmentDataSQL {
             ps.setString(5, start);
             ps.setString(6, end);
             ps.setInt(7, contactID);
-            ps.setString(8, ZonedDateTime.now(ZoneOffset.UTC).format(formatter).toString());
+            ps.setString(8, ZonedDateTime.now(ZoneOffset.UTC).format(formatter));
             ps.setString(9, lastUpdatedBy);
             ps.setInt(10, appointmentID);
             ps.executeUpdate();
@@ -172,13 +218,19 @@ public class appointmentDataSQL {
         }
     }
 
+    /**
+     * This searches for all appointments that match the provided String, allow us to look for a specific appointment
+     * @param searchTerm the term looked for
+     * @return list of appointments matching the search term
+     */
     public static ObservableList<appointmentData> searchAppointmentSQL (String searchTerm) {
         ObservableList<appointmentData> list = FXCollections.observableArrayList();
         try {
             PreparedStatement ps = JDBC.connection.prepareStatement("SELECT * FROM appointments " +
                     "WHERE Appointment_ID = '" + searchTerm +
                     "' OR Title = '" + searchTerm + "' " +
-                    "OR Description = '" + searchTerm + "'");
+                    "OR Description = '" + searchTerm + "'" +
+                    "OR Type = '" + searchTerm + "'");
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
                 list.add (
@@ -202,12 +254,19 @@ public class appointmentDataSQL {
         return list;
     }
 
-    public static boolean checkForOverLapAppointments(LocalDateTime selectedStartTime, LocalDateTime selectedEndTime) {
+    /**
+     * Will search the database for any appointments that may overlap with the appointment being created/updated.
+     * @param selectedStartTime the start time of the appointment
+     * @param selectedEndTime the end time of the appointment
+     * @param appointmentID the appointment ID
+     * @return a boolean that confirms if there is a conflict or not
+     */
+    public static boolean checkForOverLapAppointments(LocalDateTime selectedStartTime, LocalDateTime selectedEndTime, int appointmentID) {
         try {
             PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Start, END FROM appointments WHERE " +
-                    "'" + selectedStartTime + "' <= End AND '" + selectedEndTime + "' >= Start OR " +
-                    "'" + selectedStartTime + "' <= End AND '" + selectedStartTime + "' >= Start OR " +
-                    "'" + selectedEndTime + "' <= End AND '" + selectedEndTime + "' >= Start");
+                    "'" + selectedStartTime + "' <= End AND '" + selectedEndTime + "' >= Start AND Appointment_ID != '" + appointmentID + "' OR " +
+                    "'" + selectedStartTime + "' <= End AND '" + selectedStartTime + "' >= Start AND Appointment_ID != '" + appointmentID + "' OR " +
+                    "'" + selectedEndTime + "' <= End AND '" + selectedEndTime + "' >= Start AND Appointment_ID != '" + appointmentID + "'");
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
@@ -220,5 +279,258 @@ public class appointmentDataSQL {
             e.printStackTrace();
         }
         return true;
+    }
+
+    /**
+     * Will search for any appointments that are coming up within 15 minutes of the users DateTime converted to UTC
+     * @return a list of upcoming appointment
+     */
+    public static ObservableList<appointmentData> getAppointmentsIn15Min(){
+        ObservableList<appointmentData> allAppointments = FXCollections.observableArrayList();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        // prepare times and convert to UTC
+        LocalDateTime now = LocalDateTime.now();
+        ZonedDateTime userTimeZone = now.atZone(usersDataSQL.getUserTimeZone());
+        ZonedDateTime nowUTC = userTimeZone.withZoneSameInstant(ZoneOffset.UTC);
+        ZonedDateTime utcPlus15 = nowUTC.plusMinutes(15);
+
+        // create input strings
+        String rangeStart = nowUTC.format(formatter);
+        String rangeEnd = utcPlus15.format(formatter);
+        int logonUserID = usersDataSQL.getCurrentUsers().getUserID();
+
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT * FROM appointments as a " +
+                    "LEFT OUTER JOIN contacts as c ON a.Contact_ID = c.Contact_ID WHERE " +
+                    "Start BETWEEN '" + rangeStart + "' AND '" + rangeEnd + "' AND User_ID = '" + logonUserID + "'");
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                // get data from the returned rows
+                int appointmentID = rs.getInt("Appointment_ID");
+                String title = rs.getString("Title");
+                String description = rs.getString("Description");
+                String location = rs.getString("Location");
+                String type = rs.getString("Type");
+                Timestamp start = rs.getTimestamp("Start");
+                Timestamp end = rs.getTimestamp("End");
+                int customerID = rs.getInt("Customer_ID");
+                int userID = rs.getInt("User_ID");
+                int contactID = rs.getInt("Contact_ID");
+
+                appointmentData newAppointment = new appointmentData(
+                        customerID, appointmentID, contactID, userID, title, description, location, type, start, end
+                );
+                // Add to the observables list
+                allAppointments.add(newAppointment);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return allAppointments;
+    }
+
+    /**
+     * Gets all appointments for a specific customer using a customer ID
+     * @param selectedCustomerID customer ID used to find appointments
+     * @return list of appointments
+     */
+    public static ObservableList<appointmentData> getCustomerFilteredAppointments(int selectedCustomerID) {
+        ObservableList<appointmentData> filteredAppointments = null;
+        try {
+            // Prepare SQL statement
+            filteredAppointments = FXCollections.observableArrayList();
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT * FROM appointments WHERE Customer_ID = '" + selectedCustomerID + "'");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                // get data from the returned rows
+                int appointmentID = rs.getInt("Appointment_ID");
+                String title = rs.getString("Title");
+                String description = rs.getString("Description");
+                String location = rs.getString("Location");
+                String type = rs.getString("Type");
+                Timestamp start = rs.getTimestamp("Start");
+                Timestamp end = rs.getTimestamp("End");
+                int customerID = rs.getInt("Customer_ID");
+                int userID = rs.getInt("User_ID");
+                int contactID = rs.getInt("Contact_ID");
+
+                // populate into an appointmentData object
+                appointmentData newAppointment = new appointmentData(
+                        customerID, appointmentID, contactID, userID, title, description, location, type, start, end
+                );
+                filteredAppointments.add(newAppointment);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return filteredAppointments;
+    }
+
+    /**
+     * Creates a list of all appointments that match the provided month name
+     * @param selectedMonth The name of month filtering by
+     * @return list of appointments for a specific month
+     */
+    public static ObservableList<appointmentData> getMonthFilteredAppointments(String selectedMonth) {
+        ObservableList<appointmentData> filteredAppointments = null;
+        try {
+            // Prepare SQL statement
+            filteredAppointments = FXCollections.observableArrayList();
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT * FROM appointments WHERE MONTHNAME(Start) = '" + selectedMonth + "'");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                // get data from the returned rows
+                int appointmentID = rs.getInt("Appointment_ID");
+                String title = rs.getString("Title");
+                String description = rs.getString("Description");
+                String location = rs.getString("Location");
+                String type = rs.getString("Type");
+                Timestamp start = rs.getTimestamp("Start");
+                Timestamp end = rs.getTimestamp("End");
+                int customerID = rs.getInt("Customer_ID");
+                int userID = rs.getInt("User_ID");
+                int contactID = rs.getInt("Contact_ID");
+
+                // populate into an appointmentData object
+                appointmentData newAppointment = new appointmentData(
+                        customerID, appointmentID, contactID, userID, title, description, location, type, start, end
+                );
+                filteredAppointments.add(newAppointment);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return filteredAppointments;
+    }
+
+    /**
+     * Creates a list of all appointments that match the provided contact ID
+     * @param selectedContact The ID of contact filtering by
+     * @return list of appointments for a specific contact
+     */
+    public static ObservableList<appointmentData> getContactFilteredAppointments(int selectedContact) {
+        ObservableList<appointmentData> filteredAppointments = null;
+        try {
+            // Prepare SQL statement
+            filteredAppointments = FXCollections.observableArrayList();
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT * FROM appointments WHERE Contact_ID = '" + selectedContact + "'");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                // get data from the returned rows
+                int appointmentID = rs.getInt("Appointment_ID");
+                String title = rs.getString("Title");
+                String description = rs.getString("Description");
+                String location = rs.getString("Location");
+                String type = rs.getString("Type");
+                Timestamp start = rs.getTimestamp("Start");
+                Timestamp end = rs.getTimestamp("End");
+                int customerID = rs.getInt("Customer_ID");
+                int userID = rs.getInt("User_ID");
+                int contactID = rs.getInt("Contact_ID");
+
+                // populate into an appointmentData object
+                appointmentData newAppointment = new appointmentData(
+                        customerID, appointmentID, contactID, userID, title, description, location, type, start, end
+                );
+                filteredAppointments.add(newAppointment);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return filteredAppointments;
+    }
+
+    /**
+     * Creates a list of all appointments that match the provided type
+     * @param selectedType The name of type filtering by
+     * @return list of appointments for a specific type
+     */
+    public static ObservableList<appointmentData> getTypeFilteredAppointments(String selectedType) {
+        ObservableList<appointmentData> filteredAppointments = null;
+        try {
+            // Prepare SQL statement
+            filteredAppointments = FXCollections.observableArrayList();
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT * FROM appointments WHERE Type = '" + selectedType + "'");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                // get data from the returned rows
+                int appointmentID = rs.getInt("Appointment_ID");
+                String title = rs.getString("Title");
+                String description = rs.getString("Description");
+                String location = rs.getString("Location");
+                String type = rs.getString("Type");
+                Timestamp start = rs.getTimestamp("Start");
+                Timestamp end = rs.getTimestamp("End");
+                int customerID = rs.getInt("Customer_ID");
+                int userID = rs.getInt("User_ID");
+                int contactID = rs.getInt("Contact_ID");
+
+                // populate into an appointmentData object
+                appointmentData newAppointment = new appointmentData(
+                        customerID, appointmentID, contactID, userID, title, description, location, type, start, end
+                );
+                filteredAppointments.add(newAppointment);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return filteredAppointments;
+    }
+
+    /**
+     * Gets the user's current zonedDateTime in a range from current day and 1 week ahead.
+     * Offsets the current zoned date/time to that of UTC
+     * Creates a new Observable list of appointments in that time range and updates the table with those appointments.
+     * @return a list appointments in a range of week
+     */
+    public static ObservableList<appointmentData> getWeekFilterAppointments() {
+        ObservableList<appointmentData> filteredAppointments = FXCollections.observableArrayList();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        ZonedDateTime startRangeMarker = ZonedDateTime.now(usersDataSQL.getUserTimeZone());
+        ZonedDateTime endRangeMarker = startRangeMarker.plusWeeks(1);
+        ZonedDateTime startRange = startRangeMarker.withZoneSameInstant(ZoneOffset.UTC);
+        ZonedDateTime endRange = endRangeMarker.withZoneSameInstant(ZoneOffset.UTC);
+        String startRangeString = startRange.format(formatter);
+        String endRangeString = endRange.format(formatter);
+
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT * FROM appointments as a LEFT OUTER JOIN contacts as c ON a.Contact_ID = c.Contact_ID WHERE" +
+                    " Start between '" + startRangeString + "' AND '" + endRangeString + "'");
+            ResultSet rs = ps.executeQuery();
+
+            while( rs.next() ) {
+                // get data from the returned rows
+                int appointmentID = rs.getInt("Appointment_ID");
+                String title = rs.getString("Title");
+                String description = rs.getString("Description");
+                String location = rs.getString("Location");
+                String type = rs.getString("Type");
+                Timestamp start = rs.getTimestamp("Start");
+                Timestamp end = rs.getTimestamp("End");
+                int customerID = rs.getInt("Customer_ID");
+                int userID = rs.getInt("User_ID");
+                int contactID = rs.getInt("Contact_ID");
+
+                // populate into an appointmentData object
+                appointmentData newAppointment = new appointmentData(
+                        customerID, appointmentID, contactID, userID, title, description, location, type, start, end
+                );
+                filteredAppointments.add(newAppointment);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return filteredAppointments;
     }
 }
