@@ -7,7 +7,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.util.Callback;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
@@ -70,37 +69,22 @@ public class addAppointmentController implements Initializable {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
     /**
-    This will set all days that are prior to LocalDate or weekends as disabled, so they can't be picked.
-     */
-    private Callback<DatePicker, DateCell> getDayCellFactory() {
-        return new Callback<>() {
-            @Override
-            public DateCell call(final DatePicker dateBox1) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        LocalDate today = LocalDate.now();
-
-                        // Disable Saturday, Sunday, Dates < Current Date.
-                        if (item.getDayOfWeek() == DayOfWeek.SATURDAY //
-                                || item.getDayOfWeek() == DayOfWeek.SUNDAY //
-                                || item.compareTo(today) < 0) {
-                            setDisable(true);
-                            setStyle("-fx-background-color: #D3D3D3;");
-                        }
-                    }
-                };
-            }
-        };
-    }
-
-    /**
      * Sets all date for each combo box dropdown options so that the user can pick them.
+     * Lambda expression is used to disable dates prior to current day and weekends in the date picker
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
+            dateBox.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate dateBox, boolean empty) {
+                    super.updateItem(dateBox, empty);
+                    setDisable(
+                            empty || dateBox.getDayOfWeek() == DayOfWeek.SATURDAY ||
+                                    dateBox.getDayOfWeek() == DayOfWeek.SUNDAY || dateBox.isBefore(LocalDate.now()));
+                }
+            });
+
             contactDropDown.setItems(contactsDataSQL.getContactsName());
             locationDropDown.setItems(countriesDataSQL.getCountryName());
             typeDropDown.getItems().addAll("Medical", "Walk-in", "Misc");
@@ -110,8 +94,6 @@ public class addAppointmentController implements Initializable {
             endHourDropDown.getItems().addAll("08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21");
             endMinDropDown.getItems().addAll("00", "15", "30", "45");
             userIDBox.setText(String.valueOf(usersDataSQL.getCurrentUsers().getUserID()));
-            Callback<DatePicker, DateCell> dayCellFactory= this.getDayCellFactory();
-            dateBox.setDayCellFactory(dayCellFactory);
         }
         catch (Exception e) {
             e.printStackTrace();

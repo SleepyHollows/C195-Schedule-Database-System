@@ -4,7 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.util.Callback;
 import project.c195.helpers.*;
 import project.c195.model.appointmentData;
 
@@ -73,36 +72,21 @@ public class editAppointmentController implements Initializable {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
     /**
-     * This will check the current date of the user and block anything less including weekends.
-     * @return the dateBox that is now updated to prevent specific dates being picked
-     */
-    private Callback<DatePicker, DateCell> getDayCellFactory() {
-        return new Callback<>() {
-            @Override
-            public DateCell call(final DatePicker dateBox1) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        LocalDate today = LocalDate.now();
-                        // Disable Saturday, Sunday, Dates < Current Date.
-                        if (item.getDayOfWeek() == DayOfWeek.SATURDAY //
-                                || item.getDayOfWeek() == DayOfWeek.SUNDAY //
-                                || item.compareTo(today) < 0) {
-                            setDisable(true);
-                            setStyle("-fx-background-color: #D3D3D3;");
-                        }
-                    }
-                };
-            }
-        };
-    }
-
-    /**
      * Fills all combo boxes dropdown options with relevant data needed to update appointments
+     * Lambda expression is used to disable dates prior to current day and weekends in the date picker
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        dateBox.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate dateBox, boolean empty) {
+                super.updateItem(dateBox, empty);
+                setDisable(
+                        empty || dateBox.getDayOfWeek() == DayOfWeek.SATURDAY ||
+                                dateBox.getDayOfWeek() == DayOfWeek.SUNDAY || dateBox.isBefore(LocalDate.now()));
+            }
+        });
+
         contactDropDown.setItems(contactsDataSQL.getContactsName());
         locationDropDown.setItems(countriesDataSQL.getCountryName());
         divisionDropDown.setItems(divisionsDataSQL.getDivisionName());
@@ -201,6 +185,7 @@ public class editAppointmentController implements Initializable {
      * There is a checker for any empty boxes as well as checking if the selected appointment date/time conflicts
      * with business hours or an already existing appointments. the start and end times are also verified to be in
      * the correct order so that start can't come after end and vis a versa.
+     * A lambda expression is used to set up a prompt for the user to confirm if they want to update the appointment
      * @param event switches screen back to overview if update is error free
      */
     public void updateAppointment(ActionEvent event) {

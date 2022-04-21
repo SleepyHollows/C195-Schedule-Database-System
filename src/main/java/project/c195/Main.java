@@ -1,16 +1,19 @@
+/**
+ * @author Caleb Hathaway
+ * Student ID: 005470217
+ *
+ * Lambda expressions are used in editAppointmentController and editCustomerController
+ */
+
 package project.c195;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import project.c195.controller.addAppointmentController;
 import project.c195.controller.loginMenuController;
-import project.c195.controller.overviewMenuController;
 import project.c195.helpers.JDBC;
-import project.c195.helpers.contactsDataSQL;
 
 import java.io.IOException;
 
@@ -28,7 +31,6 @@ public class Main extends Application {
         catch(Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public static void main(String[] args) {

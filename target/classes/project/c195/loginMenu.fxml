@@ -6,13 +6,13 @@
 
 <AnchorPane fx:id="loginStage" minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="927.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.c195.controller.loginMenuController">
     <TextField fx:id="usernameTextField" layoutX="418.0" layoutY="95.0" prefHeight="37.0" prefWidth="358.0" />
-    <Text fx:id="usernameTitle" layoutX="260.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" wrappingWidth="130.09100341796875">
+    <Text fx:id="usernameTitle" layoutX="121.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" wrappingWidth="258.650390625">
         <font>
             <Font size="27.0" />
         </font>
     </Text>
     <TextField fx:id="passwordTextField" layoutX="418.0" layoutY="222.0" prefHeight="37.0" prefWidth="358.0" />
-    <Text fx:id="passwordTitle" layoutX="260.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" wrappingWidth="130.09100341796875">
+    <Text fx:id="passwordTitle" layoutX="133.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" wrappingWidth="130.09100341796875">
         <font>
             <Font size="27.0" />
         </font>
@@ -23,7 +23,7 @@
             <Font size="38.0" />
         </font>
     </Text>
-   <Text layoutX="14.0" layoutY="534.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Location:">
+   <Text fx:id="locationText" layoutX="14.0" layoutY="534.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Location:">
       <font>
          <Font size="15.0" />
       </font>

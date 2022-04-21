@@ -67,6 +67,7 @@ public class editCustomerController implements Initializable {
 
     /**
      * This confirms with user that they want to return to overviewMenu
+     * A lambda expression is used to set up a prompt for the user to confirm if they want to cancel the customer update
      * @param event opens overviewMenu
      */
     public void openOverviewMenu(ActionEvent event) {
