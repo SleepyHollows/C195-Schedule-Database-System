@@ -27,16 +27,14 @@ public class usersDataSQL {
             PreparedStatement ps = JDBC.connection.prepareStatement("SELECT * FROM users WHERE User_Name='" + userName + "' AND Password='" + password + "'");
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next())  {
+            if(!rs.next())  {
+                return false;
+            }
+            else {
                 currentUsers = new usersData(rs.getString("User_Name"), rs.getInt("User_ID"));
-                rs.close();
                 userLocale = Locale.getDefault();
                 userTimeZone = ZoneId.systemDefault();
                 return true;
-            }
-            else {
-                rs.close();
-                return false;
             }
         }
         catch (Exception e) {

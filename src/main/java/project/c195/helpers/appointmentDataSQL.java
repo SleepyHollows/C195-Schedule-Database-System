@@ -5,9 +5,7 @@ import javafx.collections.ObservableList;
 import project.c195.model.appointmentData;
 
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
@@ -19,22 +17,36 @@ public class appointmentDataSQL {
      */
     public static ObservableList<appointmentData> getAppointmentData() {
         ObservableList<appointmentData> list = FXCollections.observableArrayList();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
             PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, Contact_ID, User_ID FROM appointments");
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
+                        int customerID = rs.getInt("Customer_ID");
+                        int appointmentID = rs.getInt("Appointment_ID");
+                        int userID = rs.getInt("User_ID");
+                        int contactID = rs.getInt("Contact_ID");
+                        String title = rs.getString("Title");
+                        String description = rs.getString("Description");
+                        String location = rs.getString("Location");
+                        String type = rs.getString("Type");
+                        String starting = String.valueOf(rs.getTimestamp("Start")).substring(0, 19);
+                        String ending = String.valueOf(rs.getTimestamp("End")).substring(0, 19);
+
+                LocalDateTime utcStartDT = LocalDateTime.parse(starting, formatter);
+                LocalDateTime utcEndDT = LocalDateTime.parse(ending, formatter);
+
+                //convert times UTC zoneId to local zoneId
+                ZonedDateTime localZoneStart = utcStartDT.atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault());
+                ZonedDateTime localZoneEnd = utcEndDT.atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault());
+
+                //convert ZonedDateTime to a string for insertion into AppointmentsTableView
+                Timestamp localStartDT = Timestamp.valueOf(localZoneStart.format(formatter));
+                Timestamp localEndDT = Timestamp.valueOf(localZoneEnd.format(formatter));
+
                 list.add (
-                        new appointmentData(
-                                rs.getInt("Customer_ID"),
-                                rs.getInt("Appointment_ID"),
-                                rs.getInt("User_ID"),
-                                rs.getInt("Contact_ID"),
-                                rs.getString("Title"),
-                                rs.getString("Description"),
-                                rs.getString("Location"),
-                                rs.getString("Type"),
-                                rs.getTimestamp("Start"),
-                                rs.getTimestamp("End"))
+                        new appointmentData(customerID, appointmentID, userID, contactID, title, description,
+                                location, type, localStartDT, localEndDT)
                 );
             }
         }
@@ -68,8 +80,8 @@ public class appointmentDataSQL {
             String description,
             String location,
             String type,
-            String start,
-            String end,
+            Timestamp start,
+            Timestamp end,
             String createdBy,
             String lastUpdatedBy
     ) {
@@ -91,14 +103,15 @@ public class appointmentDataSQL {
                     "Last_Update, " +
                     "Last_Updated_By) " +
                     "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ps.setInt(1, appointmentID);
             ps.setString(2, title);
             ps.setString(3, description);
             ps.setString(4, location);
             ps.setString(5, type);
-            ps.setString(6, start);
-            ps.setString(7, end);
+            ps.setTimestamp(6, start);
+            ps.setTimestamp(7, end);
             ps.setInt(8, customerID);
             ps.setInt(9, userID);
             ps.setInt(10, contactID);
@@ -183,12 +196,13 @@ public class appointmentDataSQL {
             String description,
             String location,
             String type,
-            String start,
-            String end,
+            Timestamp start,
+            Timestamp end,
             int contactID,
             String lastUpdatedBy
     ) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
         try {
             PreparedStatement ps = JDBC.connection.prepareStatement("UPDATE appointments SET " +
                     "Title = ?, " +
@@ -205,8 +219,8 @@ public class appointmentDataSQL {
             ps.setString(2, description);
             ps.setString(3, location);
             ps.setString(4, type);
-            ps.setString(5, start);
-            ps.setString(6, end);
+            ps.setTimestamp(5, start);
+            ps.setTimestamp(6, end);
             ps.setInt(7, contactID);
             ps.setString(8, ZonedDateTime.now(ZoneOffset.UTC).format(formatter));
             ps.setString(9, lastUpdatedBy);
@@ -255,33 +269,6 @@ public class appointmentDataSQL {
     }
 
     /**
-     * Will search the database for any appointments that may overlap with the appointment being created/updated.
-     * @param selectedStartTime the start time of the appointment
-     * @param selectedEndTime the end time of the appointment
-     * @param appointmentID the appointment ID
-     * @return a boolean that confirms if there is a conflict or not
-     */
-    public static boolean checkForOverLapAppointments(LocalDateTime selectedStartTime, LocalDateTime selectedEndTime, int appointmentID) {
-        try {
-            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT Start, END FROM appointments WHERE " +
-                    "'" + selectedStartTime + "' <= End AND '" + selectedEndTime + "' >= Start AND Appointment_ID != '" + appointmentID + "' OR " +
-                    "'" + selectedStartTime + "' <= End AND '" + selectedStartTime + "' >= Start AND Appointment_ID != '" + appointmentID + "' OR " +
-                    "'" + selectedEndTime + "' <= End AND '" + selectedEndTime + "' >= Start AND Appointment_ID != '" + appointmentID + "'");
-            ResultSet rs = ps.executeQuery();
-
-            while(rs.next()) {
-                if(!rs.next()) {
-                    return false;
-                }
-            }
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-    /**
      * Will search for any appointments that are coming up within 15 minutes of the users DateTime converted to UTC
      * @return a list of upcoming appointment
      */
@@ -289,22 +276,15 @@ public class appointmentDataSQL {
         ObservableList<appointmentData> allAppointments = FXCollections.observableArrayList();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        // prepare times and convert to UTC
-        LocalDateTime now = LocalDateTime.now();
-        ZonedDateTime userTimeZone = now.atZone(usersDataSQL.getUserTimeZone());
-        ZonedDateTime nowUTC = userTimeZone.withZoneSameInstant(ZoneOffset.UTC);
-        ZonedDateTime utcPlus15 = nowUTC.plusMinutes(15);
-
-        // create input strings
-        String rangeStart = nowUTC.format(formatter);
-        String rangeEnd = utcPlus15.format(formatter);
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+        LocalDateTime now15 = now.plusMinutes(15);
         int logonUserID = usersDataSQL.getCurrentUsers().getUserID();
 
         try {
-            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT * FROM appointments as a " +
-                    "LEFT OUTER JOIN contacts as c ON a.Contact_ID = c.Contact_ID WHERE " +
-                    "Start BETWEEN '" + rangeStart + "' AND '" + rangeEnd + "' AND User_ID = '" + logonUserID + "'");
+            PreparedStatement ps = JDBC.connection.prepareStatement("SELECT * FROM appointments WHERE " +
+                    "Start BETWEEN '" + now + "' AND '" + now15 + "' AND User_ID = '" + logonUserID + "'");
             ResultSet rs = ps.executeQuery();
+
 
             while(rs.next()) {
                 // get data from the returned rows
@@ -313,18 +293,30 @@ public class appointmentDataSQL {
                 String description = rs.getString("Description");
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
-                Timestamp start = rs.getTimestamp("Start");
-                Timestamp end = rs.getTimestamp("End");
+                String starting = String.valueOf(rs.getTimestamp("Start")).substring(0, 19);
+                String ending = String.valueOf(rs.getTimestamp("End")).substring(0, 19);
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
 
+                LocalDateTime utcStartDT = LocalDateTime.parse(starting, formatter);
+                LocalDateTime utcEndDT = LocalDateTime.parse(ending, formatter);
+
+                //convert times UTC zoneId to local zoneId
+                ZonedDateTime localZoneStart = utcStartDT.atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault());
+                ZonedDateTime localZoneEnd = utcEndDT.atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault());
+
+                //convert ZonedDateTime to a string for insertion into AppointmentsTableView
+                Timestamp localStartDT = Timestamp.valueOf(localZoneStart.format(formatter));
+                Timestamp localEndDT = Timestamp.valueOf(localZoneEnd.format(formatter));
+
                 appointmentData newAppointment = new appointmentData(
-                        customerID, appointmentID, contactID, userID, title, description, location, type, start, end
+                        customerID, appointmentID, contactID, userID, title, description, location, type, localStartDT, localEndDT
                 );
                 // Add to the observables list
                 allAppointments.add(newAppointment);
             }
+            return allAppointments;
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -533,4 +525,31 @@ public class appointmentDataSQL {
         }
         return filteredAppointments;
     }
+
+    /**
+     * The SQL statements is looking for any appointments that are in range of the selected datetime of the current
+     * appointment in question, and will not look at any appointments with the same appointment ID.
+     * @param startTime start time selected
+     * @param endTime end time selected
+     * @param thisAppointmentID appointment ID of the current appointment being added/updated
+     * @return a true or false boolean stating if there are any conflicts in the database
+     */
+    public static boolean checkForOverlap(LocalDateTime startTime, LocalDateTime endTime, int thisAppointmentID) throws SQLException {
+        // Prepare SQL statement
+        PreparedStatement ps =  JDBC.connection.prepareStatement(
+                "SELECT * FROM appointments "
+                        + "WHERE (? BETWEEN Start AND End OR ? BETWEEN Start AND End OR ? < Start AND ? > End) "
+                        + "AND (Appointment_ID != ?)");
+
+        ps.setTimestamp(1, Timestamp.valueOf(startTime));
+        ps.setTimestamp(2, Timestamp.valueOf(endTime));
+        ps.setTimestamp(3, Timestamp.valueOf(startTime));
+        ps.setTimestamp(4, Timestamp.valueOf(endTime));
+        ps.setInt(5, thisAppointmentID);
+        ResultSet rs = ps.executeQuery();
+
+        return !rs.next();
+    }
+
+
 }

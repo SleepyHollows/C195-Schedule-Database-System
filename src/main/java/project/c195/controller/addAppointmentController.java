@@ -1,14 +1,15 @@
 package project.c195.controller;
 
-import project.c195.helpers.*;
-import project.c195.model.customerData;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import project.c195.helpers.*;
+import project.c195.model.customerData;
+
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -61,12 +62,11 @@ public class addAppointmentController implements Initializable {
     Alert alert;
     ButtonType yes = new ButtonType("Yes", ButtonBar.ButtonData.YES);
     ButtonType no = new ButtonType("No", ButtonBar.ButtonData.NO);
-    String start, end, contactName, title, description, division, type, createdBy, lastUpdateBy;
+    String contactName, title, description, division, type, createdBy, lastUpdateBy, start, end;
     int customerID, appointmentID, userID, contactID;
     boolean validOverLap, validBusinessHours;
-    LocalDateTime startDateTime, endDateTime;
     LocalDate dateSelected;
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+    DateTimeFormatter hourMinFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
     /**
      * Sets all date for each combo box dropdown options so that the user can pick them.
@@ -89,9 +89,9 @@ public class addAppointmentController implements Initializable {
             locationDropDown.setItems(countriesDataSQL.getCountryName());
             typeDropDown.getItems().addAll("Medical", "Walk-in", "Misc");
             divisionDropDown.setItems(divisionsDataSQL.getDivisionNameByCountryID(countriesDataSQL.getCountryIDByName(locationDropDown.getSelectionModel().getSelectedItem())));
-            hourDropDown.getItems().addAll("08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21");
+            hourDropDown.getItems().addAll("05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22");
             minDropDown.getItems().addAll("00", "15", "30", "45");
-            endHourDropDown.getItems().addAll("08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21");
+            endHourDropDown.getItems().addAll("05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22");
             endMinDropDown.getItems().addAll("00", "15", "30", "45");
             userIDBox.setText(String.valueOf(usersDataSQL.getCurrentUsers().getUserID()));
         }
@@ -143,23 +143,43 @@ public class addAppointmentController implements Initializable {
      * This is the boolean method used to verify that date/time entered doesn't conflict with any already existing
      * appointments or business hours. if there is any conflict it will return false which triggers an alert in the
      * addAppointment method.
-     * @param startDateTime zonedDateTime of the start appointment DateTime
-     * @param endDateTime zonedDateTime of the end appointment DateTime
+     *
+     * @param startDateTime   zonedDateTime of the start appointment DateTime
+     * @param endDateTime     zonedDateTime of the end appointment DateTime
      * @param appointmentDate ZonedDateTime of the selected appointment date
      * @return returns false if any conflicts are found
      */
-    public Boolean validateBusinessHours(LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDate appointmentDate) {
+    public boolean validateBusinessHours(LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDate appointmentDate) {
         // (8am to 10pm EST)
-        // Turn into zonedDateTimeObject, this allows for comparing customer's local date to EST
-        ZonedDateTime startZoneDateTime = ZonedDateTime.of(startDateTime, usersDataSQL.getUserTimeZone());
-        ZonedDateTime endZoneDateTime = ZonedDateTime.of(endDateTime, usersDataSQL.getUserTimeZone());
+        //Converting selected datetime to EST so that we can verify it's not outside of business hours
+
+        ZonedDateTime startZonedDateTime = ZonedDateTime.of(startDateTime, usersDataSQL.getUserTimeZone());
+        ZonedDateTime endZonedDateTime = ZonedDateTime.of(endDateTime, usersDataSQL.getUserTimeZone());
         ZonedDateTime startBusinessHours = ZonedDateTime.of(appointmentDate, LocalTime.of(8,0),
                 ZoneId.of("America/New_York"));
         ZonedDateTime endBusinessHours = ZonedDateTime.of(appointmentDate, LocalTime.of(22, 0),
                 ZoneId.of("America/New_York"));
-        return !(startZoneDateTime.isBefore(startBusinessHours) | startZoneDateTime.isAfter(endBusinessHours) |
-                endZoneDateTime.isBefore(startBusinessHours) | endZoneDateTime.isAfter(endBusinessHours) |
-                startZoneDateTime.isAfter(endZoneDateTime));
+
+        //All possible conflicts for the appointment
+        return !(startZonedDateTime.isBefore(startBusinessHours) | startZonedDateTime.isAfter(endBusinessHours) |
+                endZonedDateTime.isBefore(startBusinessHours) | endZonedDateTime.isAfter(endBusinessHours) |
+                startZonedDateTime.isAfter(endZonedDateTime));
+    }
+
+    /**
+     * We send over the start and end time as well as the appointment ID to appointmentDataSQL where it will look for
+     * any appointments that may conflict with the selected time.
+     * @param thisAppointmentID The appointment ID used to make sure we aren't comparing an appointment with itself
+     * @param startDateTime The start time selected for the appointment
+     * @param endDateTime The end time selected for the appointment
+     * @return a boolean of true of false depending on if there are conflicts or not
+     * @throws SQLException catches any exceptions from the SQL statements
+     */
+    public Boolean validateOverlapAppointments(int thisAppointmentID, LocalDateTime startDateTime,
+                                               LocalDateTime endDateTime) throws SQLException {
+
+        // Get list of appointments that might have conflicts
+        return appointmentDataSQL.checkForOverlap(startDateTime, endDateTime, thisAppointmentID);
     }
 
     /**
@@ -172,7 +192,7 @@ public class addAppointmentController implements Initializable {
      * the correct order so that start can't come after end and vis a versa.
      * @param event switches screen back to overview if insert is error free
      */
-    public void addAppointment(ActionEvent event) {
+    public void addAppointment(ActionEvent event) throws SQLException {
         try {
             customerID = Integer.parseInt(customerIDBox.getText());
             appointmentID = appointmentDataSQL.getAppointmentID();
@@ -196,16 +216,24 @@ public class addAppointmentController implements Initializable {
                 //All the data needed for setting the appointment datetime for insert and getting the current datetime
                 //of the user
                 dateSelected = dateBox.getValue();
+                LocalTime localStartHour = LocalTime.parse(hourDropDown.getSelectionModel().getSelectedItem() + ":" + minDropDown.getSelectionModel().getSelectedItem(), hourMinFormatter);
+                LocalTime localEndHour = LocalTime.parse(endHourDropDown.getSelectionModel().getSelectedItem() + ":" + endMinDropDown.getSelectionModel().getSelectedItem(), hourMinFormatter);
+
+                //combine date and start/end times together
+                LocalDateTime startDT = LocalDateTime.of(dateSelected, LocalTime.from(localStartHour));
+                LocalDateTime endDT = LocalDateTime.of(dateSelected, LocalTime.from(localEndHour));
+                //convert startDT and endDT to UTC
+                ZonedDateTime startUTC = startDT.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
+                ZonedDateTime endUTC = endDT.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
+                //convert UTC time to a timestamp for database insertion
+                Timestamp sqlStartTS = Timestamp.valueOf(startUTC.toLocalDateTime());
+                Timestamp sqlEndTS = Timestamp.valueOf(endUTC.toLocalDateTime());
                 start = dateSelected + " " + hourDropDown.getSelectionModel().getSelectedItem() + ":" + minDropDown.getSelectionModel().getSelectedItem() + ":00";
                 end = dateSelected + " " + endHourDropDown.getSelectionModel().getSelectedItem() + ":" + endMinDropDown.getSelectionModel().getSelectedItem() + ":00";
                 Timestamp startTime = Timestamp.valueOf(start);
                 Timestamp endTime = Timestamp.valueOf(end);
-                startDateTime = LocalDateTime.of(dateBox.getValue(),
-                        LocalTime.parse(hourDropDown.getSelectionModel().getSelectedItem() + ":" + minDropDown.getSelectionModel().getSelectedItem(), formatter));
-                endDateTime = LocalDateTime.of(dateBox.getValue(),
-                        LocalTime.parse(endHourDropDown.getSelectionModel().getSelectedItem() + ":" + endMinDropDown.getSelectionModel().getSelectedItem(), formatter));
-                validOverLap = appointmentDataSQL.checkForOverLapAppointments(startDateTime, endDateTime, appointmentID);
-                validBusinessHours = validateBusinessHours(startDateTime, endDateTime, dateSelected);
+                validOverLap = validateOverlapAppointments(appointmentID, sqlStartTS.toLocalDateTime(), sqlEndTS.toLocalDateTime());
+                validBusinessHours = validateBusinessHours(startDT, endDT, dateSelected);
 
                 if(!endTime.after(startTime)) {
                     alert = new Alert(Alert.AlertType.ERROR, "End time can't be after Start time");
@@ -221,7 +249,7 @@ public class addAppointmentController implements Initializable {
                         alert.showAndWait().ifPresent(button -> {
                             if(button == yes) {
                                 try {
-                                    appointmentDataSQL.appointmentInsertSQL(customerID, appointmentID, userID, contactID, title, description, division, type, start, end, createdBy, lastUpdateBy);
+                                    appointmentDataSQL.appointmentInsertSQL(customerID, appointmentID, userID, contactID, title, description, division, type, sqlStartTS, sqlEndTS, createdBy, lastUpdateBy);
                                     sceneController.switchScreen(event, "overviewMenu.fxml");
                                 } catch (IOException e) {
                                     e.printStackTrace();

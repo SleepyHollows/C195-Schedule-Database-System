@@ -7,7 +7,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 public class loggerController {
-    private static final String logFile = "logger.txt";
+    private static final String logFile = "login_activity.txt";
 
     /**
      * If the login fails, then we log a failed statement, otherwise we will log a successful statement.

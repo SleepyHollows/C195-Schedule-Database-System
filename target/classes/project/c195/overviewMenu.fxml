@@ -30,12 +30,13 @@
             <TableColumn fx:id="appointmentAppIDCol" prefWidth="51.999996185302734" text="App ID" />
             <TableColumn fx:id="appointmentTitleCol" prefWidth="101.0" text="Title" />
             <TableColumn fx:id="appointmentCustomerIDCol" prefWidth="77.0" text="Customer ID" />
-            <TableColumn fx:id="appointmentContactIDCol" prefWidth="64.0" text="Contact ID" />
-            <TableColumn fx:id="appointmentDescriptionCol" minWidth="0.0" prefWidth="150.0" text="Description" />
-            <TableColumn fx:id="appointmentLocationCol" minWidth="0.0" prefWidth="54.0" text="Location" />
-            <TableColumn fx:id="appointmentTypeCol" prefWidth="70.0" text="Type" />
-            <TableColumn fx:id="appointmentStartCol" prefWidth="125.0" text="Start" />
-            <TableColumn fx:id="appointmentEndCol" prefWidth="134.0" text="End" />
+            <TableColumn fx:id="appointmentContactIDCol" prefWidth="70.0" text="Contact ID" />
+            <TableColumn fx:id="appointmentDescriptionCol" minWidth="0.0" prefWidth="108.79998779296875" text="Description" />
+            <TableColumn fx:id="appointmentLocationCol" minWidth="0.0" prefWidth="90.39999389648438" text="Location" />
+            <TableColumn fx:id="appointmentTypeCol" prefWidth="67.39996337890625" text="Type" />
+            <TableColumn fx:id="appointmentStartCol" minWidth="5.79998779296875" prefWidth="100.39996337890625" text="Start" />
+            <TableColumn fx:id="appointmentEndCol" minWidth="0.0" prefWidth="85.20001220703125" text="End" />
+         <TableColumn fx:id="appointmentUserIDCol" prefWidth="65.5999755859375" text="User ID" />
         </columns>
     </TableView>
     <Text layoutX="21.0" layoutY="306.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Appointments">

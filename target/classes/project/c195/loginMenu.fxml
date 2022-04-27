@@ -12,7 +12,7 @@
         </font>
     </Text>
     <TextField fx:id="passwordTextField" layoutX="418.0" layoutY="222.0" prefHeight="37.0" prefWidth="358.0" />
-    <Text fx:id="passwordTitle" layoutX="133.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" wrappingWidth="130.09100341796875">
+    <Text fx:id="passwordTitle" layoutX="133.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" wrappingWidth="258.6503906249999">
         <font>
             <Font size="27.0" />
         </font>
@@ -23,12 +23,12 @@
             <Font size="38.0" />
         </font>
     </Text>
-   <Text fx:id="locationText" layoutX="14.0" layoutY="534.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Location:">
+   <Text fx:id="locationText" layoutX="15.0" layoutY="535.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Location:" wrappingWidth="138.38623046875">
       <font>
          <Font size="15.0" />
       </font>
    </Text>
-   <Label fx:id="currentLocationDisplay" layoutX="133.0" layoutY="520.0" text="Location Data">
+   <Label fx:id="currentLocationDisplay" layoutX="154.0" layoutY="520.0" text="Location Data">
       <font>
          <Font size="14.0" />
       </font></Label>

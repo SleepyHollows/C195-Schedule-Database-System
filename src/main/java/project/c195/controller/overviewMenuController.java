@@ -22,6 +22,9 @@ import java.util.ResourceBundle;
 public class overviewMenuController implements Initializable {
 
     @FXML
+    private TableColumn<appointmentData, Integer> appointmentUserIDCol;
+
+    @FXML
     private ComboBox<String> miscDropDown;
 
     @FXML
@@ -111,7 +114,8 @@ public class overviewMenuController implements Initializable {
     Alert alert;
     ButtonType yes = new ButtonType("Yes", ButtonBar.ButtonData.YES);
     ButtonType no = new ButtonType("No", ButtonBar.ButtonData.NO);
-    String selectedMonth;
+    String selectedMonth, alertAppointmentType, alertCustomerName;
+    int alertAppointmentID, alertCustomerID;
 
     /**
      * Fills both tables on the overviewMenu with the list of customers and appointments in the database
@@ -137,6 +141,7 @@ public class overviewMenuController implements Initializable {
         appointmentTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         appointmentStartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
         appointmentEndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        appointmentUserIDCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
         appointmentList = appointmentDataSQL.getAppointmentData();
         appointmentTable.setItems(appointmentList);
@@ -257,9 +262,12 @@ public class overviewMenuController implements Initializable {
             alert.showAndWait();
         }
         else {
+            alertAppointmentID = selectedAppointment.getAppointmentID();
+            alertAppointmentType = selectedAppointment.getType();
             alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete appointment");
-            alert.setHeaderText("Are you sure you want to delete this appointment, all data will be lost?");
+            alert.setHeaderText("Are you sure you want to delete this appointment, all data will be lost?" +
+                    "\n Appointment ID: " + alertAppointmentID + "\n Appointment Type: " + alertAppointmentType);
             alert.setContentText("Delete?");
             alert.getButtonTypes().setAll(yes, no);
             alert.showAndWait().ifPresent(button -> {
@@ -275,7 +283,6 @@ public class overviewMenuController implements Initializable {
                 }
             });
         }
-
     }
 
     /**
@@ -298,9 +305,12 @@ public class overviewMenuController implements Initializable {
             alert.showAndWait();
         }
         else {
+            alertCustomerName = selectedCustomer.getName();
+            alertCustomerID = selectedCustomer.getId();
             alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete customer");
-            alert.setHeaderText("Are you sure you want to delete this customer, all data will be lost including appointments?");
+            alert.setHeaderText("Are you sure you want to delete this customer, all data will be lost including appointments?\n" +
+                    "Customer Name: " + alertCustomerName + "\nCustomer ID: " + alertCustomerID);
             alert.setContentText("Delete?");
             alert.getButtonTypes().setAll(yes, no);
             alert.showAndWait().ifPresent(button -> {
@@ -317,7 +327,6 @@ public class overviewMenuController implements Initializable {
                 }
             });
         }
-
     }
 
     /**
