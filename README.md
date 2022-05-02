@@ -13,8 +13,6 @@ SDK version: SDK default 17
 
 mysql connector Version: 8.0.28
 
-Student Application version: 3.0
-
 
 A GUI application that interacts with a database to store appointments and customer data.
 
